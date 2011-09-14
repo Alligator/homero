@@ -7,7 +7,10 @@ from util import http
 def hitze(inp):
     hitzelist = [
       "ahahaaha",
-      "rofl, epic",
+      "kinda lol",
+      "lol",
+      "fucking complex",
+      "heh",
       "omg.",
       "uugh",
       "why..",
