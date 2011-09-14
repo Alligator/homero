@@ -20,7 +20,15 @@ def homero(inp):
     return title + ' - ' + yt_url % vid
 @hook.command
 def sylauxe(inp):
-    j = http.get_json(searchURL("diaper"))
+    sylauxeList = [
+        "diaper",
+        "anime",
+        "my little sister cant be this cute",
+        "naruto",
+        "yaoi",
+        "muscle worship"
+        ]
+    j = http.get_json(searchURL(random.choice(sylauxeList)))
 
     if j['data']['totalItems'] == 0:
         return 'no results found'
