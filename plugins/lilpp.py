@@ -10,6 +10,8 @@ f.close()
 def lilpp(inp, say=None):
     say("< Lilpp> i hate " + getline("lilpp_list.txt", randint(0, num_lines-1)))
     return
+
+@hook.command
 def sponge(inp, say=None):
     spongeList = [
         "crate",
