@@ -1,7 +1,7 @@
 import simplejson as json
 import random
-from util import hook, http
-
+from util import hook
+from util import http
 
 @hook.command
 def hitze(inp):
@@ -15,6 +15,26 @@ def hitze(inp):
       "rip"
     ]
 
-    jsonData = http.get_json('http://www.reddit.com/r/funny+pics+cars+cartalk+geek+xbox+gaming+minecraft+terraria/.json')
+    subreddit = [
+    "pics",
+    "funny",
+    "wtf",
+    "minecraft",
+    "cars",
+    "bitcoin",
+    "terraria",
+    "fffffffuuuuuuuuuuuu",
+    "gifs",
+    "tf2",
+    ]
 
-    return "<@hitzler> " + random.choice(jsonData['data']['children'])['data']['url'] + " " + random.choice(hitzelist)
+    noSelf = False
+    while noSelf == False:
+        jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
+        potentialURL = random.choice(jsonData['data']['children'])['data']['url']
+        if 'reddit' in potentialURL:
+            noSelf = False
+        else:
+            noSelf = True
+
+    return "<@hitzler> " + potentialURL + " " + random.choice(hitzelist)
