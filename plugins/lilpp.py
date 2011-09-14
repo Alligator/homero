@@ -7,7 +7,8 @@ num_lines = len(f.readlines())
 f.close()
 
 @hook.command
-def lilpp(inp):
-    return "i hate " + getline("lilpp_list.txt", randint(0, num_lines-1))
+def lilpp(inp, say=None):
+    say("< Lilpp> i hate " + getline("lilpp_list.txt", randint(0, num_lines-1)))
+    return
 
 
