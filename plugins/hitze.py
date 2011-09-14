@@ -1,5 +1,6 @@
 import simplejson as json
 import random
+import http
 
 @hook.command
 def hitze(inp):
