@@ -6,7 +6,7 @@ from util import hook, http
 yt_url = "http://youtu.be/%s/"
 
 def searchURL(cat):
-    return "https://gdata.youtube.com/feeds/api/videos?v=2&alt=jsonc&category=" + cat.replace(' ','%2C') + "&max-results=1&start-index=" + str(random.randint(1,20))te
+    return "https://gdata.youtube.com/feeds/api/videos?v=2&alt=jsonc&category=" + cat.replace(' ','%2C') + "&max-results=1&start-index=" + str(random.randint(1,20))
 
 @hook.command(autohelp=False)
 def homero(inp):
