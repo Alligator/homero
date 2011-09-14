@@ -509,7 +509,7 @@ def createIdiot(user=None):
     if(rnd(0,5) < 2):
         idiotText += choice(signoff) + choice(end_punctuation)
     else:
-        idiotText = choice(opening1) + getPunctuation() + idiotText + getPunctuation()
+        idiotText = choice(opening1) + getPunctuation() + idiotText
 
     if(rnd(0,3) > 1):
         idiotText = idiotText.upper()
