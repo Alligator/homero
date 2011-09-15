@@ -17,6 +17,7 @@ timeout = 2*60  # 5 minute timeout before cache is cleared
 
 @hook.event('PRIVMSG', ignorebots=False)
 def line(paraml, input=None, db=None, bot=None):
+    global cache
     #cache[chan][0] = [last_msg_time]
     chan = input['chan']
     nick = input['nick']
