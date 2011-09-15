@@ -8,7 +8,7 @@ f.close()
 
 @hook.command
 def lilpp(inp, say=None):
-    say("< Lilpp> i hate " + getline("lilpp_list.txt", randint(0, num_lines-1)))
+    say("<%LilPP> i hate " + getline("lilpp_list.txt", randint(0, num_lines-1)))
     return
 
 @hook.command
