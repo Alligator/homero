@@ -163,17 +163,16 @@ def main(conn, out):
         if m:
             trigger = m.group(1).lower()
             command = match_command(trigger)
-            input = Input(conn, *out)
             
             if command in bot.config['disabled_commands']:
                 print "Disabled command " + command + " called."
             else:
                 if isinstance(command, list):  # multiple potential matches
-                    #input = Input(conn, *out)
+                    input = Input(conn, *out)
                     input.reply("did you mean %s or %s?" %
                                 (', '.join(command[:-1]), command[-1]))
                 elif command in bot.commands:
-                    #input = Input(conn, *out)
+                    input = Input(conn, *out)
                     input.trigger = trigger
                     input.inp_unstripped = m.group(2)
                     input.inp = input.inp_unstripped.strip()
