@@ -23,9 +23,10 @@ print 'Loading plugins'
 # bootstrap the reloader
 eval(compile(open(os.path.join('core', 'reload.py'), 'U').read(),
     os.path.join('core', 'reload.py'), 'exec'))
-reload(init=True)
-
+reload_core(init=True)
 config()
+reload_plugs(init=True)
+
 if not hasattr(bot, 'config'):
     exit()
 

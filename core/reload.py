@@ -1,3 +1,4 @@
+import pprint
 import collections
 import glob
 import os
@@ -32,10 +33,11 @@ def format_plug(plug, kind='', lpad=0, width=40):
 
 
 def reload(init=False):
-    changed = False
+    reload_core(init=init)
+    reload_plugs(init=init)
 
+def reload_core(init=False):
     if init:
-        bot.plugs = collections.defaultdict(list)
         bot.threads = {}
 
     core_fileset = set(glob.glob(os.path.join("core", "*.py")))
@@ -44,8 +46,6 @@ def reload(init=False):
         mtime = os.stat(filename).st_mtime
         if mtime != mtimes.get(filename):
             mtimes[filename] = mtime
-
-            changed = True
 
             try:
                 eval(compile(open(filename, 'U').read(), filename, 'exec'),
@@ -57,10 +57,21 @@ def reload(init=False):
                 continue
 
             if filename == os.path.join('core', 'reload.py'):
-                reload(init=init)
+                reload_core(init=init)
                 return
 
+
+
+def reload_plugs(init=False):
+    changed = False
+
+    if init:
+        bot.plugs = collections.defaultdict(list)
+
     fileset = set(glob.glob(os.path.join('plugins', '*.py')))
+    core_fileset = set(glob.glob(os.path.join("core", "*.py")))
+
+    fileset = set([fi for fi in fileset if fi.split('\\')[1] not in bot.config['disabled_plugins']])
 
     # remove deleted/moved plugins
     for name, data in bot.plugs.iteritems():
