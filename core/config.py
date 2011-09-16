@@ -19,7 +19,6 @@ if not os.path.exists('config'):
               "channels": ["#flf"]
             }
           },
-          "disabled_plugins": [],
           "disabled_commands": [],
           "acls": {},
           "api_keys": {},
