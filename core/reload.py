@@ -70,7 +70,7 @@ def reload_plugs(init=False):
     fileset = set(glob.glob(os.path.join('plugins', '*.py')))
     core_fileset = set(glob.glob(os.path.join("core", "*.py")))
 
-    fileset = set([fi for fi in fileset if fi.split('\\')[1] not in bot.config['disabled_plugins']])
+    fileset = set([fi for fi in fileset if os.path.split(fi)[1] not in bot.config['disabled_plugins']])
 
     # remove deleted/moved plugins
     for name, data in bot.plugs.iteritems():

@@ -18,15 +18,15 @@ def homero(inp):
     title = j['data']['items'][0]['title']
     vid = j['data']['items'][0]['id']
     return title + ' - ' + yt_url % vid
+
 @hook.command
 def sylauxe(inp):
     sylauxeList = [
         "diaper",
         "anime",
         "my little sister cant be this cute",
-        "naruto",
-        "yaoi",
-        "muscle worship"
+        "pony",
+        "anime obama"
         ]
     j = http.get_json(searchURL(random.choice(sylauxeList)))
 
