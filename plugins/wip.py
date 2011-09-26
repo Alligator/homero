@@ -9,4 +9,5 @@ imgs = src.xpath('//img/@src')
 
 @hook.command(autohelp=False)
 def wip(inp):
+    '/!\\ UNDER CONSTRUCTION /!\\'
     return url + choice(imgs)
