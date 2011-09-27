@@ -51,11 +51,24 @@ def seeninput(match, input=None, db=None, say=None):
 
 @hook.command
 def yt(inp, nick=None, chan=None, db=None):
+    '.yt query|hh -- searches youtube links posted in channel. matches usernames and video titles'
     db_init(db)
-    q = '%' + inp + '%'
-    vids = db.execute("select vid, title, user, time from ytmemory"
-                      " where (title like ? or user like ?) and chan = ?",
-                      (q, q, chan))
+
+    try:
+        # we got a time
+        int(inp)
+        # q is a time in hours. we need dis in seconds
+        q = time.time() - (int(inp) * 60 * 60)
+        vids = db.execute("select vid, title, user, time from ytmemory"
+                " where time > ? and chan=?",
+                (q, chan))
+    except:
+        # we got a query
+        q = '%' + inp + '%'
+        vids = db.execute("select vid, title, user, time from ytmemory"
+                " where (title like ? or user like ?) and chan = ?",
+                (q, q, chan))
+
     if vids:
         vid_list = vids.fetchall()
     else:
@@ -63,8 +76,6 @@ def yt(inp, nick=None, chan=None, db=None):
 
     if not vid_list:
         return 'no matches'
-
-    print vid_list
 
     if len(vid_list) > 1:
         out = ''
