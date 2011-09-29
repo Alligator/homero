@@ -30,9 +30,9 @@ def format_vid(vidin, bold):
     user    = vidin[2]
     ti      = time.ctime(vidin[3])
     if bold:
-        out = '\x02%s %s\x02 posted by %s on %s' % (vid, title, user, ti)
+        out = '\x02%s - %s\x02 posted by %s on %s' % (vid, title, user, ti)
     else:
-        out = '%s %s posted by %s on %s' % (vid, title, user, ti)
+        out = '%s - %s posted by %s on %s' % (vid, title, user, ti)
     return out
 
 def db_init(db):
