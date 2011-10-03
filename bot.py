@@ -62,6 +62,8 @@ while True:
     cur = time.time()
     if last == 0:
         last = cur
+    # 10 seconds for testing.
+    # gonna make it 1 min when its finished (lmao yeah right)
     if cur - last > 10:
         last = cur
         call_time = True
@@ -71,6 +73,8 @@ while True:
 
     for conn in bot.conns.itervalues():
         if call_time:
+            # doesnt work
+            # TODO not be an idiot
             out = '420x69'
             main(conn, out)
         try:

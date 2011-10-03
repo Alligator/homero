@@ -146,6 +146,8 @@ def main(conn, out):
 
     # TIME
     for func, args in bot.plugs['time']:
+        # dumb magic number that doesnt work.
+        # idk a good way to do this yet.
         if out == '420x69':
             dispatch(Input(conn, *out), "time", func, args)
             return
@@ -153,7 +155,6 @@ def main(conn, out):
     # EVENTS
     for func, args in bot.events[inp.command] + bot.events['*']:
         dispatch(Input(conn, *out), "event", func, args)
-
 
 
     if inp.command == 'PRIVMSG':

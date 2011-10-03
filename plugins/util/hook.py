@@ -37,11 +37,6 @@ def _hook_add(func, add, name=''):
     if not hasattr(func, '_thread'):  # does function run in its own thread?
         func._thread = False
 
-    if hasattr(func, '_debug'):
-        from pprint import pprint
-        del func._debug
-        pprint(inspect.getmembers(func))
-
 
 def sieve(func):
     if func.func_code.co_argcount != 5:
@@ -103,11 +98,6 @@ def event(arg=None, **kwargs):
 
 def singlethread(func):
     func._thread = True
-    return func
-
-
-def debug(func):
-    func._debug = True
     return func
 
 
