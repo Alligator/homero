@@ -37,6 +37,11 @@ def _hook_add(func, add, name=''):
     if not hasattr(func, '_thread'):  # does function run in its own thread?
         func._thread = False
 
+    if hasattr(func, '_debug'):
+        from pprint import pprint
+        del func._debug
+        pprint(inspect.getmembers(func))
+
 
 def sieve(func):
     if func.func_code.co_argcount != 5:
@@ -63,6 +68,22 @@ def command(arg=None, **kwargs):
         return command_wrapper(arg)
 
 
+def time(arg=None, **kwargs):
+    args = kwargs
+
+    def time_wrapper(func):
+        args['name'] = func.func_name
+        _hook_add(func, ['time', (func, args)], 'time')
+        return func
+
+    if inspect.isfunction(arg):
+        return time_wrapper(arg)
+    else:
+        if arg is not None:
+            args['time'] = arg
+        return time_wrapper
+
+
 def event(arg=None, **kwargs):
     args = kwargs
 
@@ -82,6 +103,11 @@ def event(arg=None, **kwargs):
 
 def singlethread(func):
     func._thread = True
+    return func
+
+
+def debug(func):
+    func._debug = True
     return func
 
 

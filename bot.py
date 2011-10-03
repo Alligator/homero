@@ -53,11 +53,26 @@ if not os.path.exists(bot.persist_dir):
 
 print 'Running main loop'
 
+last = 0
+
 while True:
+
+    # TIME DIFF STUFF
+    call_time = False
+    cur = time.time()
+    if last == 0:
+        last = cur
+    if cur - last > 10:
+        last = cur
+        call_time = True
+
     reload()  # these functions only do things
     config()  # if changes have occured
 
     for conn in bot.conns.itervalues():
+        if call_time:
+            out = '420x69'
+            main(conn, out)
         try:
             out = conn.out.get_nowait()
             main(conn, out)
@@ -65,3 +80,5 @@ while True:
             pass
     while all(conn.out.empty() for conn in bot.conns.itervalues()):
         time.sleep(.1)
+        cur = time.time()
+        if cur - last > 10: break

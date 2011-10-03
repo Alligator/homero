@@ -144,9 +144,17 @@ def match_command(command):
 def main(conn, out):
     inp = Input(conn, *out)
 
+    # TIME
+    for func, args in bot.plugs['time']:
+        if out == '420x69':
+            dispatch(Input(conn, *out), "time", func, args)
+            return
+
     # EVENTS
     for func, args in bot.events[inp.command] + bot.events['*']:
         dispatch(Input(conn, *out), "event", func, args)
+
+
 
     if inp.command == 'PRIVMSG':
         # COMMANDS
@@ -188,3 +196,4 @@ def main(conn, out):
                 input.inp = m
 
                 dispatch(input, "regex", func, args)
+
