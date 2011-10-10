@@ -502,8 +502,8 @@ def createIdiot(user=None):
     if user is "":
         idiotText = choice(opening2) + " " + choice(hated_object) + " " + choice(terrible_thing)
     else:
-        x = user.endswith('s') ? ' are' : ' is'
-        idiotText = choice(opening2) + " " + user + " is" + " " + choice(terrible_thing)
+        x = ' are' if user.endswith('s') else ' is'
+        idiotText = choice(opening2) + " " + user + x + " " + choice(terrible_thing)
     if(rnd(0,1) == 0):
         idiotText += " because " + choice(because);
     idiotText += getPunctuation() + " " + choice(moronic_solution) + getPunctuation()
