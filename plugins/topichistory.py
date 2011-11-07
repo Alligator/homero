@@ -19,12 +19,15 @@ def addtopic(paraml, chan=None, db=None):
 
 @hook.command(autohelp=False)
 def topic(inp, chan=None, db=None):
+    if not len(inp) == 0:
+        chan = inp
     topics = db.execute('select topic from topichistory'
                         ' where channel=?', (chan,))
-    if not topics:
-        return 'no previous topics saved'
 
     t = topics.fetchall()
+    if not t:
+        return "no previous topics found"
+
     out = ""
     for topic in t:
         out += topic[0] + '\n'
