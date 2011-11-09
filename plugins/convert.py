@@ -10,5 +10,5 @@ def convert(inp, say=None):
     j = http.get_json('https://raw.github.com/currencybot/open-exchange-rates/master/latest.json')
     r1 = j['rates'][c1.upper()]
     r2 = j['rates'][c2.upper()]
-    rate = r1/r2
+    rate = r2/r1
     return float(rate) * float(v1)
