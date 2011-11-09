@@ -10,8 +10,8 @@ def db_init(db):
 
 # get the topic on join and change
 @hook.event('TOPIC 332')
-def addtopic(paraml, chan=None, db=None):
-    topic = paraml[-1]
+def addtopic(paraml, nick=None, chan=None, db=None):
+    topic = "%s changed the topic to %s" %(nick, paraml[-1])
     db_init(db)
     db.execute('insert or replace into topichistory(topic, channel)'
                'values(?,?)', (topic, chan))
@@ -19,7 +19,8 @@ def addtopic(paraml, chan=None, db=None):
 
 @hook.command(autohelp=False)
 def topic(inp, chan=None, db=None):
-    if not len(inp) == 0:
+    db_init(db)
+    if len(inp) > 0:
         chan = inp
     topics = db.execute('select topic from topichistory'
                         ' where channel=?', (chan,))
