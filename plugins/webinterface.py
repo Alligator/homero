@@ -4,9 +4,10 @@
 import web
 import thread
 import json
+import pprint
 from util import hook, http
 
-webSql = web.database(dbn='sqlite',db='./persist/homero.irc.synirc.net.db')
+webSql = web.database(dbn='sqlite',db='./persist/homero2.irc.synirc.net.db')
 urls = (
     '/ythistory', 'ythistory',
     )
@@ -29,19 +30,9 @@ class ythistory:
     		result = webSql.select('ytmemory',order="time DESC",vars={'channel': '#' + data.channel,'user':data.username},where=query)
     	else:
     		result = webSql.select('ytmemory',order="time DESC")
+
+        return json.dumps([i for i in result])
     	
-    	#Json lib was stripping results and i literally do not care to investigate it, enjoy ghetto
-    	shitJson = "{\n\"videos\": [\n"
-    	for i in result:
-    		shitJson += "{\n\"id\": \"" + i.vid + "\",\n"
-    		shitJson += "\"title\": \"" + i.title + "\",\n"
-    		shitJson += "\"user\": \"" + i.user + "\",\n"
-    		shitJson += "\"channel\": \"" + i.chan + "\",\n"
-    		shitJson += "\"time\": \"" + str(i.time) + "\"\n},\n"
-        # this is so terrible im sorry
-        shitJson = shitJson[:-2] + '\n'
-    	shitJson += ']}'
-        return shitJson
 
 def runServer():
 	app.run()
