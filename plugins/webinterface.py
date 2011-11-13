@@ -7,7 +7,7 @@ import json
 import pprint
 from util import hook, http
 
-webSql = web.database(dbn='sqlite',db='./persist/homero2.irc.synirc.net.db')
+webSql = web.database(dbn='sqlite',db='./persist/homero.irc.synirc.net.db')
 urls = (
     '/ythistory', 'ythistory',
     )
