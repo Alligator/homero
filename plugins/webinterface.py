@@ -15,20 +15,20 @@ app = web.application(urls, globals())
 class ythistory:
     def GET(self):
     	data = web.input(channel="",username="")
-    	goodass = dict()
-    	
     	# ugly, u do it better tho bitch??
     	query = ''
     	if data.channel:
     		query += ' chan = $channel '
-    	
     	if data.username:
     		if data.channel:
     			query += ' AND user = $user'
     		else:
     			query += ' user = $user'
 
-    	result = webSql.select('ytmemory',order="time DESC",vars={'channel': '#' + data.channel,'user':data.username},where=query)
+    	if query:
+    		result = webSql.select('ytmemory',order="time DESC",vars={'channel': '#' + data.channel,'user':data.username},where=query)
+    	else:
+    		result = webSql.select('ytmemory',order="time DESC")
     	
     	#Json lib was stripping results and i literally do not care to investigate it, enjoy ghetto
     	shitJson = "{\n\"videos\": [\n"
