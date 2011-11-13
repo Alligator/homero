@@ -15,21 +15,14 @@ app = web.application(urls, globals())
 
 class ythistory:
     def GET(self):
-    	data = web.input(channel="",username="")
-    	# ugly, u do it better tho bitch??
-    	query = ''
-    	if data.channel:
-    		query += ' chan = $channel '
-    	if data.username:
-    		if data.channel:
-    			query += ' AND user = $user'
-    		else:
-    			query += ' user = $user'
+    	data = web.input(q="")
 
-    	if query:
-    		result = webSql.select('ytmemory',order="time DESC",vars={'channel': '#' + data.channel,'user':data.username},where=query)
-    	else:
-    		result = webSql.select('ytmemory',order="time DESC")
+        q = '%' + data.q + '%'
+
+        if data.q:
+            result = webSql.select('ytmemory', where='title like $q or user like $q or chan like $q', vars={'q':q})
+        else:
+            result = webSql.select('ytmemory')
 
         return json.dumps([i for i in result])
     	
