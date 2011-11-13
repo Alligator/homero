@@ -38,6 +38,8 @@ class ythistory:
     		shitJson += "\"user\": \"" + i.user + "\",\n"
     		shitJson += "\"channel\": \"" + i.chan + "\",\n"
     		shitJson += "\"time\": \"" + str(i.time) + "\"\n},\n"
+        # this is so terrible im sorry
+        shitJson = shitJson[:-2] + '\n'
     	shitJson += ']}'
         return shitJson
 
