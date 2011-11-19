@@ -9,7 +9,8 @@ last_tweet = http.get_json(url)[0]['text']
 @hook.event('*')
 def horse(inp, conn=None):
     global last, url, last_tweet
-    if time.time() - last > 120:
+    print last
+    if time.time() - last > 240:
         j = http.get_json(url)
         tweet = j[0]['text']
         if tweet == last_tweet:
