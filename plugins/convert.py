@@ -1,7 +1,7 @@
 from util import hook, http
 import re
 
-reg = re.compile(r"(\d+)\s*?([A-Za-z]{3})\s*?([A-Za-z]{3})", re.I)
+reg = re.compile(r"(\d+\.?\d*?)\s*?([A-Za-z]{3})\s*?([A-Za-z]{3})", re.I)
 
 @hook.command
 def convert(inp, say=None):

@@ -18,6 +18,11 @@ def tane(paraml, say=None):
     if today.weekday() != 4:
         taned = False
 
+@hook.command
+def tane(inp, say=None):
+    say(rainbow("I CAN'T WAIT"))
+    say('http://tane.us/weekend.html')
+    say(rainbow("FOR THE WEEKEND TO BEGIN"))
 
 def rainbow(text):
     c = cycle(['\x034', '\x037', '\x039', '\x0310', '\x036'])
