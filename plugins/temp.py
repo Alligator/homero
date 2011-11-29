@@ -1,7 +1,8 @@
 from util import hook
 
 @hook.command
-def derpderp(inp):
+def temp(inp):
+    ".temp <temp> -- converts <temp> from C to F and F to C"
     try:
         temp = float(inp)
     except:
