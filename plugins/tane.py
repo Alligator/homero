@@ -5,8 +5,7 @@ from itertools import cycle, izip
 taned = False
 
 @hook.event('*')
-#@hook.command
-def tane(paraml, say=None):
+def tane_event(paraml, say=None):
     global taned
     today = datetime.today()
     if today.weekday() == 4 and today.hour == 18 and not taned:
