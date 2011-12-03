@@ -8,7 +8,7 @@ f.close()
 
 @hook.command
 def lilpp(inp, say=None):
-    say("<%LilPP> i hate " + getline("lilpp_list.txt", randint(0, num_lines-1)))
+    say("<@LilPP> i hate " + getline("lilpp_list.txt", randint(0, num_lines-1)))
     return
 
 @hook.command
@@ -18,7 +18,8 @@ def sponge(inp, say=None):
         "menu",
         "shadow",
         "robot man",
-        "zombie island"
+        "zombie island",
+        "black wrestler"
         ]
     say("<sponge-> i hate " + choice(spongeList))
     return
