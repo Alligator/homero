@@ -20,6 +20,17 @@ def homero(inp):
     return title + ' - ' + yt_url % vid
 
 @hook.command
+def kula(inp):
+    j = http.get_json(searchURL("kula world"))
+    if j['data']['totalItems'] == 0:
+        return 'no results found'
+
+    title = j['data']['items'][0]['title']
+    vid = j['data']['items'][0]['id']
+    return title + ' - ' + yt_url % vid
+    
+
+@hook.command
 def sylauxe(inp):
     sylauxeList = [
         "diaper",
