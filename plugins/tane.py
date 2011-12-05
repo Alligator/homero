@@ -23,6 +23,7 @@ def tane(inp, say=None):
     say('http://tane.us/weekend.html')
     say(rainbow("FOR THE WEEKEND TO BEGIN"))
 
+@hook.command
 def rainbow(text):
     c = cycle(['\x034', '\x037', '\x039', '\x0310', '\x036'])
     out = ""
