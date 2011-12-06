@@ -1,5 +1,5 @@
 from util import hook, http
-from urllib2 import HTTPError
+from urllib2 import HTTPError, unquote
 import random
 import collections
 
@@ -13,7 +13,8 @@ def imitate(inp):
         if e.code == 404:
             return "user not found"
         else:
-            return "something is wrong. i think im rate limited o god hhjelp gouys??"
+            print e.code
+            return
 
     # learn that text
     # omg markov chains
@@ -21,6 +22,7 @@ def imitate(inp):
     w1 = ""
     for tweet in tweets:
         for word in tweet.split():
+            word = unquote(word)
             if '@' in word: break
             if '#' in word: break
             suffixes[w1].append(word)

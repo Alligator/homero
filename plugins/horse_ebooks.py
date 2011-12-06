@@ -23,5 +23,5 @@ def horse_cmd(inp, say=None):
     global url, last, last_tweet
     if time.time() - last > 120:
         last = time.time()
-        last_tweet = http.get_json(url)[0]['text']
+        last_tweet = http.get_json(url)[0]['text'].replace('\n', ' ')
     say('Horse_ebooks: %s' % last_tweet)
