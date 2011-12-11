@@ -8,7 +8,13 @@ def convert(inp, say=None):
     m = reg.findall(inp)
     v1, c1, c2 = m[0]
     j = http.get_json('https://raw.github.com/currencybot/open-exchange-rates/master/latest.json')
-    r1 = j['rates'][c1.upper()]
-    r2 = j['rates'][c2.upper()]
+    if c1.upper() == 'USD':
+        r1 = 1
+    else:
+        r1 = j['rates'][c1.upper()]
+    if c2.upper() == 'USD':
+        r2 = 1
+    else:
+        r2 = j['rates'][c2.upper()]
     rate = r2/r1
     return float(rate) * float(v1)
