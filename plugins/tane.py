@@ -5,14 +5,14 @@ from itertools import cycle, izip
 taned = False
 
 @hook.event('*')
-def tane_event(paraml, say=None):
+def tane_event(paraml, conn=None):
     global taned
     today = datetime.today()
     if today.weekday() == 4 and today.hour == 18 and not taned:
         taned = True
-        say(rainbow("I CAN'T WAIT"))
-        say('http://tane.us/weekend.html')
-        say(rainbow("FOR THE WEEKEND TO BEGIN"))
+        conn.cmd('PRIVMSG #sa-minecraft ' + rainbow("I CAN'T WAIT"))
+        conn.cmd('PRIVMSG #sa-minecraft http://tane.us/weekend.html')
+        conn.cmd('PRIVMSG #sa-minecraft ' + rainbow("FOR THE WEEKEND TO BEGIN"))
 
     if today.weekday() != 4:
         taned = False
