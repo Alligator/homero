@@ -20,7 +20,7 @@ class ythistory:
         q = '%' + data.q + '%'
 
         if data.q:
-            result = webSql.select('ytmemory', where='title like $q or user like $q or chan like $q', vars={'q':q})
+            result = webSql.select('ytmemory', where='title like $q or user like $q or chan like $q order by time desc', vars={'q':q})
         else:
             result = webSql.select('ytmemory')
 
