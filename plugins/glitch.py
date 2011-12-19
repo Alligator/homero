@@ -9,7 +9,7 @@ def glitch(inp):
     '.glitch url chance amount seed -- http://glitch.goonscape.org/'
     # ok im gonna forget what the heck i was doin here by tomorrow so lets write a proper comment
     # split the params from inp but make them '' if they aren't there!!
-    p = izip_longest(('url', 'chance', 'amount', 'seed'), inp.split(), fillvalue='')
+    p = izip_longest(('url', 'chance', 'datalength', 'randseed'), inp.split(), fillvalue='')
     params = [a for a in p]
 
     register_openers()
