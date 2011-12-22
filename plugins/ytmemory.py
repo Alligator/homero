@@ -44,7 +44,7 @@ def db_init(db):
 def seeninput(match, input=None, db=None, say=None):
     db_init(db)
     vid = match.group(1)
-    db.execute('insert or replace into ytmemory(vid, title, user, time, chan)'
+    db.execute('insert or ignore into ytmemory(vid, title, user, time, chan)'
                'values(?,?,?,?,?)', (vid, get_video_title(vid),
                 input.nick.lower(), time.time(), input.chan))
     db.commit()
