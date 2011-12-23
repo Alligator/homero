@@ -25,7 +25,7 @@ def tane(inp, say=None):
 
 @hook.command
 def rainbow(text):
-    c = cycle(['\x034', '\x037', '\x039', '\x0310', '\x036'])
+    c = cycle(['\x0304', '\x0307', '\x0309', '\x0310', '\x0306'])
     out = ""
     for t in text:
         out += c.next() + t

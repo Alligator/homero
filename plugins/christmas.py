@@ -4,7 +4,7 @@ from itertools import cycle
 @hook.command('holidays')
 @hook.command
 def christmas(text, say=None):
-    c = cycle(['\x034', '\x039'])
+    c = cycle(['\x0304', '\x0309'])
     out = ""
     for t in text:
         out += c.next() + t
