@@ -16,6 +16,8 @@ def horse(inp, conn=None):
         tweet = get_tweet()
         if tweet == last_tweet:
             return
+        if 't.co' in tweet:
+            return
         conn.cmd('PRIVMSG #sa-minecraft Horse_ebooks: %s' % tweet)
         last_tweet = tweet
 
