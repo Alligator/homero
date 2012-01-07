@@ -3,6 +3,8 @@ import random
 from util import hook
 from util import http
 
+import urllib,urllib2,json
+
 @hook.command
 def hitze(inp):
     hitzelist = [
@@ -41,3 +43,18 @@ def hitze(inp):
             noSelf = True
 
     return "<@hitzler> " + potentialURL + " " + random.choice(hitzelist)
+
+def checkURL(url):
+    params = urllib.urlencode({'q':'url:' + url})
+    url = "http://www.reddit.com/search.json?%s" % params
+    jsan = json.load(urllib2.urlopen(url))
+    if len(jsan['data']['children']) > 0:
+        return True
+    return False
+
+
+#@hook.event('PRIVMSG')
+def hitze_event(paraml, say=None, nick=None):
+    if 'hitz' in nick.lower() and 'http://' in paraml[1]:
+        if checkURL(paraml[1]):
+            say('/!\\ REDDIT ALERT /!\\ REDDIT ALERT /!\\ PLEASE DISREGARD THE PREVIOUS MESSAGE. WE APOLOGISE FOR ANY LIBERTARIANS ENCOUNTERED')
