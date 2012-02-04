@@ -1,9 +1,9 @@
 from util import hook
 
-@hook.regex('weed')
+# @hook.regex('w.*e.*e.*d')
 def weed(inp, say=None):
     say('420')
     return
 
-@hook.regex('420')
+# @hook.regex('4.*2.*0|four.*twenty')
 def fourtwenty(inp, say=None): say('weed')

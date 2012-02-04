@@ -8,7 +8,7 @@ cow_url = "http://www.youtube.com/watch?v=lXKDu6cdXLI"
 lawn_url = "http://www.youtube.com/watch?v=r6FpEjY1fg8"
 
 # sw8 regex by commonwealth bro lilpp
-yre = "http://(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/)([^&\n]+)"
+yre = "(?:http|https)://(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/)([^&\n]+)"
 
 @hook.command
 def lawnmower(inp): return dub(lawn_url + " " + inp)

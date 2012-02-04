@@ -27,7 +27,6 @@ def hitze(inp):
     "minecraft",
     "cars",
     "bitcoin",
-    "terraria",
     "fffffffuuuuuuuuuuuu",
     "gifs",
     "tf2",

@@ -10,7 +10,7 @@ def temp(inp):
         return 'vinic is a busta'
     if abs(temp) == 420:
         return "SMOKE WEED EVERY DAY DONT GIVE A FUCK"
-    if abs(temp) > 150:
+    if abs(temp) > 500:
         return "2 hot 4 u"
     c = (temp - 32) * (5.0/9.0)
     f = (temp * (9.0/5.0)) + 32
