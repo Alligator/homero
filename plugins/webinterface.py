@@ -22,7 +22,7 @@ class ythistory:
         if data.q:
             result = webSql.select('ytmemory', where='title like $q or user like $q or chan like $q order by time desc', vars={'q':q})
         else:
-            result = webSql.select('ytmemory')
+            result = webSql.select('ytmemory', order="time desc")
 
         return json.dumps([i for i in result])
     	
