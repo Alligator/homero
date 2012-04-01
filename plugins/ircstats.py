@@ -27,8 +27,8 @@ def ircstats(paraml, input=None, bot=None):
             # im so sorry
             pass
 
-    now = datetime.datetime.today()
-    past = datetime.datetime.today() - datetime.timedelta(hours=24)
+    now = datetime.datetime.utcnow()
+    past = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
 
     # put the data in the dict
     nick = input['nick']
@@ -54,7 +54,8 @@ def ircstats(paraml, input=None, bot=None):
         for i in range(24):
             posters_out[p]['hours_active'].append([x.hour for x in posters[p]['hours_active']].count(i))
 
-    sort = {'posters': sorted(posters_out.iteritems(), key=lambda x: x[1]['total_posts'], reverse=True)[:10], 'total': total}
+    top10 = sorted(posters_out.iteritems(), key=lambda x: x[1]['total_posts'], reverse=True)[:10]
+    sort = {'posters': top10, 'total': sum([n[1]['total_posts'] for n in top10]), 'now': now.hour}
 
     # make a template
     env = jinja2.Environment(loader=jinja2.FileSystemLoader('/var/www/ircstats/templates'))
@@ -62,8 +63,20 @@ def ircstats(paraml, input=None, bot=None):
     f = open('/var/www/ircstats/index.html', 'w')
     f.write(temp.render(**sort))
 
+    # remove people with 0 posts
+    for key, val in posters.iteritems():
+        if val['total_posts'] == 0:
+            del posters[key]
+
     # pickle the dict
     f = open(os.path.join(bot.persist_dir, 'ircstats.pkl'), 'wb')
     pickle.dump(posters, f)
     pickle.dump(total, f)
     f.close()
+
+@hook.event('NICK')
+def nickchange(paraml, nick=None, chan=None):
+    if not chan == '#sa-minecraft':
+        return
+    posters[paraml[0]] = posters[nick]
+    del posters[nick]
