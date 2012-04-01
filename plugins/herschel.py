@@ -9,5 +9,5 @@ def fourtwenty(inp, say=None): say('weed')
 
 @hook.regex('anime')
 def anime(inp, say=None):
-    say('I think you mean animé.')
+    say(u'I think you mean animé')
     return
