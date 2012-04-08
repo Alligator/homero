@@ -11,3 +11,8 @@ def fourtwenty(inp, say=None): say('weed')
 def anime(inp, say=None):
     say(unicode('I think you mean animé', 'utf-8'))
     return
+
+@hook.regex('ruby on rails)
+def ruby(inp, say=None):
+    say('I think you mean rubits on rails')
+    return
