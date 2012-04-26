@@ -16,6 +16,7 @@ names = [
     'Clay',
     'Bruce',
     'Chris',
+    'Dave',
 ]
 
 @hook.event('PRIVMSG')
