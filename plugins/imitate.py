@@ -6,7 +6,7 @@ import collections
 @hook.command
 def imitate(inp):
     ".imitate <account> -- use a markov text generator to imiatate a twitter account"
-    url = "http://api.twitter.com/1/statuses/user_timeline/%s.json?count=100" % inp
+    url = "http://api.twitter.com/1/statuses/user_timeline/%s.json?count=500" % inp
     try:
         tweets = [t['text'] for t in http.get_json(url)]
     except HTTPError, e:
