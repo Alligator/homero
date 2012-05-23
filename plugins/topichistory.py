@@ -29,7 +29,9 @@ def topic(inp, chan=None, db=None):
     if not t:
         return "no previous topics found"
 
-    out = '\n\n'.join([topic[0] for topic in t])
+    t = [topic[0] for topic in t]
+    t.reverse()
+    out = '\n\n'.join(t)
 
     register_openers()
     datagen, headers = multipart_encode({'sprunge': out})
