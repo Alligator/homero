@@ -3,21 +3,19 @@ import random
 from util import hook
 from util import http
 
-import urllib,urllib2,json
-
 @hook.command
 def hitze(inp):
     hitzelist = [
       "ahahaaha",
-      "kinda lol",
       "lol",
-      "fucking complex",
       "heh",
       "omg.",
       "uugh",
       "why..",
       "lol pcgaming",
-      "rip"
+      "rip",
+      "sperg",
+      "omg hyle",
     ]
 
     subreddit = [
@@ -29,7 +27,8 @@ def hitze(inp):
     "bitcoin",
     "fffffffuuuuuuuuuuuu",
     "gifs",
-    "tf2",
+    "nba",
+
     ]
 
     noSelf = False
@@ -41,7 +40,7 @@ def hitze(inp):
         else:
             noSelf = True
 
-    return "<@hitzler> " + potentialURL + " " + random.choice(hitzelist)
+    return "<hitz> " + potentialURL + " " + random.choice(hitzelist)
 
 def checkURL(url):
     params = urllib.urlencode({'q':'url:' + url})
