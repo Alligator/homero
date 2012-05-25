@@ -4,6 +4,23 @@ from util import hook
 from util import http
 
 @hook.command
+def hyle(inp, say=None):
+    subreddit = [
+    "conspiracy",
+    "twinpeaks",
+    "mensrights",
+    "crime",
+    ]
+
+    if random.random() > 0.2:
+        jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
+        say('<hyle> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
+    else:
+        jsonData = http.get_json('http://www.reddit.com/r/ass.json')
+        say('<hyle> ' + random.choice(jsonData['data']['children'])['data']['url'])
+        say('<hyle> ass  like  that')
+
+@hook.command
 def hitze(inp):
     hitzelist = [
       "ahahaaha",
