@@ -12,13 +12,17 @@ def hyle(inp, say=None):
     "crime",
     ]
 
-    if random.random() > 0.2:
+    if random.random() > 0.075:
         jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
         say('<hyle> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
     else:
         jsonData = http.get_json('http://www.reddit.com/r/ass.json')
         say('<hyle> ' + random.choice(jsonData['data']['children'])['data']['url'])
         say('<hyle> ass  like  that')
+
+@hook.regex('oh my god')
+def omg(inp, say=None):
+    say('oh. my. god.');
 
 @hook.command
 def hitze(inp):
