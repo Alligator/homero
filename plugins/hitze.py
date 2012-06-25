@@ -41,12 +41,10 @@ def hitze(inp):
 
     subreddit = [
     "pics",
-    "funny",
     "wtf",
-    "minecraft",
-    "cars",
-    "bitcoin",
-    "fffffffuuuuuuuuuuuu",
+    "cityporn",
+    "gaming",
+    "minecraftcirclejerk",
     "gifs",
     "nba",
 
