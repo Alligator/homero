@@ -7,7 +7,7 @@ reg = re.compile(r"(\d+\.?\d*?)\s*?([A-Za-z]{3})\s*?([A-Za-z]{3})", re.I)
 def convert(inp, say=None):
     m = reg.findall(inp)
     v1, c1, c2 = m[0]
-    j = http.get_json('https://raw.github.com/currencybot/open-exchange-rates/master/latest.json')
+    j = http.get_json('http://openexchangerates.org/latest.json')
     if c1.upper() == 'USD':
         r1 = 1
     else:

@@ -12,7 +12,7 @@ def openbook(inp, say=None):
 		name = result["from"]["name"].encode("utf8", "ignore")
 		message =  result["message"].encode("utf8", "ignore")
 		profile_link = result["from"]["id"].encode("utf8", "ignore")
-		say("\x0307%s\x0F: %s" % (name.encode('utf-8' ,'ignore'), message.encode('utf-8', 'ignore')))
+		say("\x0307%s\x0F: %s" % (name.encode('ascii' ,'ignore'), message.encode('ascii', 'ignore')))
 		say("\x0309Profile Link\x0F: http://facebook.com/profile.php?id=%s&v=wall" % (profile_link))
 
 if __name__ == "__main__":

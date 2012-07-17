@@ -1,3 +1,4 @@
+import os
 import re
 import socket
 import time
@@ -42,7 +43,11 @@ class crlf_tcp(object):
         return socket.socket(socket.AF_INET, socket.TCP_NODELAY)
 
     def run(self):
-        self.socket.connect((self.host, self.port))
+        err = 1
+        while err:
+            err = self.socket.connect_ex((self.host, self.port))
+            if err != 0: print os.strerror(err)
+                
         thread.start_new_thread(self.recv_loop, ())
         thread.start_new_thread(self.send_loop, ())
 

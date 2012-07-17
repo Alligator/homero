@@ -5,6 +5,7 @@ fill = u"\u25AC"
 
 @hook.command
 def jab(inp):
+    if len(inp) == 0: return
     passchars = [2, 15, 18, 29, 31, 32]
     if len(inp) > 96:
         return
