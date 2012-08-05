@@ -58,7 +58,7 @@ def forecast(inp, nick=None, reply=None, db=None):
         "postal code." % inp
 
   # im laffin v. hard at this monstrosity
-  out = ' | '.join(['{0}: H:{1}F L:{2}F. {3}'.format(a.find('day_of_week').get('data'), a.find('low').get('data'), a.find('high').get('data'), a.find('condition').get('data')) for a in w.findall('forecast_conditions')])
+  out = ' | '.join(['{0}: H:{1}F L:{2}F. {3}'.format(a.find('day_of_week').get('data'), a.find('high').get('data'), a.find('low').get('data'), a.find('condition').get('data')) for a in w.findall('forecast_conditions')])
   city = w.find('forecast_information/city').get('data')
 
   reply('{0} | {1}'.format(city, out))
