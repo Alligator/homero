@@ -44,11 +44,6 @@ def weather(inp, nick='', reply=None, db=None):
   reply('%(city)s: %(condition)s, %(temp_f)sF/%(temp_c)sC (H:%(high)sF'\
       ', L:%(low)sF), %(humidity)s, %(wind_condition)s.' % info)
 
-  if inp and not dontsave:
-    db.execute("insert or replace into weather(nick, loc) values (?,?)",
-        (nick.lower(), loc))
-    db.commit()
-
 @hook.command(autohelp=False)
 def forecast(inp, nick=None, reply=None, db=None):
   w = get_weather_xml(nick, db, inp)
