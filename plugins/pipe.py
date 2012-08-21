@@ -89,4 +89,4 @@ def pipe(inp, db=None, input=None, bot=None):
     output = nxt
 
   for line in output:
-    say(line)
+    say(line.decode('utf-8'))
