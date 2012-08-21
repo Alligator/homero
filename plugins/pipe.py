@@ -34,6 +34,9 @@ class Fifo(object):
     except IndexError,e :
       raise StopIteration()
 
+  def __len__(self):
+    return len(self.q)
+
 def split_cmd(cmd):
   func = cmd.split()[0]
   args = cmd[len(func)+1:].strip()
@@ -88,5 +91,11 @@ def pipe(inp, db=None, input=None, bot=None):
 
     output = nxt
 
-  for line in output:
-    say(line.decode('utf-8'))
+  if len(output) > 10:
+    say('woah too many lines (%s)' % len(output))
+  else:
+    for line in output:
+      if isinstance(line, str):
+        say(unicode(line, errors='replace'))
+      else:
+        say(line)
