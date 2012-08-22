@@ -18,7 +18,15 @@ def get_weather_xml(nick, db, loc=None):
       return weather.__doc__
     loc = loc[0]
 
-  w = http.get_xml('http://www.google.com/ig/api', weather=loc)
+  # gd it google api
+  done = False
+  count = 0
+  while not done and count < 5:
+    try:
+      w = http.get_xml('http://www.google.com/ig/api', weather=loc)
+      done = True
+    except lxml.etree.XMLSyntaxError, e:
+      continue
 
   if inp and not dontsave:
     db.execute("insert or replace into weather(nick, loc) values (?,?)",
