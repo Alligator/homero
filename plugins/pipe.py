@@ -61,6 +61,7 @@ def call(func, inp, input):
 
 @hook.command
 def pipe(inp, db=None, input=None, bot=None):
+  ".pipe <cmd> | <cmd> etc etc. pipe commands into each other. if the first word after the pipe isnt a command the text gets sent to the next command"
   cmds = inp.split('|')
 
   output = Fifo()
@@ -77,12 +78,18 @@ def pipe(inp, db=None, input=None, bot=None):
 
   for cmd in cmds:
     nxt = Fifo()
+
     func, args = split_cmd(cmd)
+
+    # if the first word doesnt map to a func push the whole thing into the queue
+    try:
+      func = [i[0] for i in bot.plugs['command'] if i[1]['name'].startswith(func)][0]
+    except IndexError, e:
+      output.push(cmd)
+      continue
 
     if output.empty():
       output.push(args)
-
-    func = [i[0] for i in bot.plugs['command'] if i[1]['name'] == func][0]
 
     for line in output:
       res = call(func, line, input)

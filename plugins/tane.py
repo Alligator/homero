@@ -1,6 +1,6 @@
 from util import hook
 from datetime import datetime
-from itertools import cycle, izip
+import re
 
 taned = False
 
@@ -25,8 +25,11 @@ def tane(inp, say=None):
 
 @hook.command
 def rainbow(text):
-    c = cycle(['\x0304', '\x0307', '\x0309', '\x0310', '\x0306'])
+    c =['\x0304', '\x0307', '\x0309', '\x0310', '\x0306']
+    regex = re.compile("\x03(?:,?\d{1,2}(?:,\d{1,2})?)?", re.UNICODE)
+    text = regex.sub('', text)
     out = ""
-    for t in text:
-        out += c.next() + t
+    l = len(c)
+    for i, t in enumerate(text):
+        out += c[i % l] + t
     return out
