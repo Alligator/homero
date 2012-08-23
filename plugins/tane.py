@@ -1,4 +1,4 @@
-from util import hook
+from util import hook, strip_formatting
 from datetime import datetime
 import re
 
@@ -26,8 +26,7 @@ def tane(inp, say=None):
 @hook.command
 def rainbow(text):
     c =['\x0304', '\x0307', '\x0309', '\x0310', '\x0306']
-    regex = re.compile("\x03(?:,?\d{1,2}(?:,\d{1,2})?)?", re.UNICODE)
-    text = regex.sub('', text)
+    text = strip_formatting.strip(text)
     out = ""
     l = len(c)
     for i, t in enumerate(text):

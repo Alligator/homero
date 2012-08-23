@@ -1,4 +1,4 @@
-from util import hook
+from util import hook, strip_formatting
 
 # lets work out how we do this
 #
@@ -85,8 +85,10 @@ def pipe(inp, db=None, input=None, bot=None):
     try:
       func = [i[0] for i in bot.plugs['command'] if i[1]['name'].startswith(func)][0]
     except IndexError, e:
-      output.push(cmd)
+      output.push(strip_formatting.strip(cmd))
       continue
+
+    args = strip_formatting.strip(args)
 
     if output.empty():
       output.push(args)
