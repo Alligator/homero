@@ -1,13 +1,15 @@
-from util import hook
+from util import hook, strip_formatting
 
 @hook.command
 def rip(inp, say=None):
-    inp = str(inp)
+    inp = inp.encode('utf-8')
     topfiller = str.center('', len(inp)-3, '-')
 
     top = '  _.' + topfiller + '-._\n'
 
-    width = len(top)-3
+    print len(top)
+    print len(strip_formatting.strip(top))
+    width = len(strip_formatting.strip(top))-3
 
     rip = ' |' + str.center('RIP', width) + '|\n'
     nmr = ' |' + str.center(inp.upper(), width) + '|\n'

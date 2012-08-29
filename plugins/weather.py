@@ -1,6 +1,7 @@
 "weather, thanks to google"
 
 from util import hook, http
+import lxml
 
 def get_weather_xml(nick, db, loc=None):
   db.execute("create table if not exists weather(nick primary key, loc)")
