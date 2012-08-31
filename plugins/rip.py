@@ -3,13 +3,11 @@ from util import hook, strip_formatting
 @hook.command
 def rip(inp, say=None):
     inp = inp.encode('utf-8')
-    topfiller = str.center('', len(inp)-3, '-')
+    topfiller = str.center('', len(strip_formatting.strip(inp))-3, '-')
 
     top = '  _.' + topfiller + '-._\n'
 
-    print len(top)
-    print len(strip_formatting.strip(top))
-    width = len(strip_formatting.strip(top))-3
+    width = len(top)-3
 
     rip = ' |' + str.center('RIP', width) + '|\n'
     nmr = ' |' + str.center(inp.upper(), width) + '|\n'
@@ -23,7 +21,7 @@ def rip(inp, say=None):
 @hook.command
 def bread(inp, say=None):
     inp = str(inp)
-    topfiller = str.center('', len(inp)-1, '-')
+    topfiller = str.center('', len(strip_formatting.strip(inp))-5, '-')
 
     top = '  .' + topfiller + '-.\n'
 
