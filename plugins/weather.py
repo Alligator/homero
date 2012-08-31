@@ -34,10 +34,11 @@ def weather(inp, nick=None, reply=None, db=None, bot=None):
   # if we get multiple matches pick the first and re-request
   try:
     matches = response['response']['results']
-    response = http.get_json(api_url + matches[0]['zmw'] + '.json')
+    response = http.get_json(api_url + 'zmw:' + matches[0]['zmw'] + '.json')
+    print response
   except KeyError, e:
     pass
 
   name = response['current_observation']['display_location']['full']
 
-  return '{name} - {weather}, {temperature_string}, feels like {feelslike_string}'.format(name=name, **response['current_observation'])
+  return '{name} - {weather}, {temperature_string}'.format(name=name, **response['current_observation'])
