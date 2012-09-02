@@ -23,7 +23,6 @@ def tane(inp, say=None):
     say('http://tane.us/weekend.html')
     say(rainbow("FOR THE WEEKEND TO BEGIN"))
 
-@hook.command
 def rainbow(text):
     c =['\x0304', '\x0307', '\x0309', '\x0310', '\x0306']
     text = strip_formatting.strip(text)

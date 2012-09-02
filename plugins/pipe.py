@@ -42,7 +42,7 @@ def split_cmd(cmd):
   args = cmd[len(func)+1:].strip()
   return func, args
 
-def call(func, inp, input):
+def call(func, func_name, inp, input):
   # mostly copy/pasted from main.py
   args = func._args
   if args:
@@ -50,6 +50,7 @@ def call(func, inp, input):
       input.db = db
     if 'input' in args:
       input.input = input
+      input.trigger = func_name
     if 0 in args:
       return func(input.inp, **input)
     else:
@@ -79,11 +80,11 @@ def pipe(inp, db=None, input=None, bot=None):
   for cmd in cmds:
     nxt = Fifo()
 
-    func, args = split_cmd(cmd)
+    func_name, args = split_cmd(cmd)
 
     # if the first word doesnt map to a func push the whole thing into the queue
     try:
-      func = [i[0] for i in bot.plugs['command'] if i[1]['name'].startswith(func)][0]
+      func = [i[0] for i in bot.plugs['command'] if i[1]['name'].startswith(func_name)][0]
     except IndexError, e:
       output.push(strip_formatting.strip(cmd))
       continue
@@ -94,7 +95,7 @@ def pipe(inp, db=None, input=None, bot=None):
       output.push(args)
 
     for line in output:
-      res = call(func, line, input)
+      res = call(func, func_name, line, input)
       if res:
         nxt.push(res)
 
