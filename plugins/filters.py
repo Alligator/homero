@@ -1,11 +1,12 @@
 from util import hook, strip_formatting
 from random import randint, choice
+from collections import OrderedDict
 import string
 
 #------------------------------------------------------------------------------
 # COLORS
 
-colors = [
+colors = OrderedDict([
   ('red',    '\x0304'),
   ('ornage', '\x0307'),
   ('yellow', '\x0308'),
@@ -17,24 +18,37 @@ colors = [
   ('magenta','\x0306'),
   ('pink',   '\x0313'),
   ('maroon', '\x0305')
-]
+])
 
 @hook.command
-def rainbow(text):
-    out = ""
-    l = len(colors)
-    for i, t in enumerate(text):
-        out += colors[i % l][1] + t
-    return out
+def rainbow(inp):
+  inp = str(inp)
+  col = colors.items()
+  out = ""
+  l = len(colors)
+  for i, t in enumerate(inp):
+      out += col[i % l][1] + t
+  return out
 
 @hook.command
 def wrainbow(inp):
+  inp = str(inp)
+  col = colors.items()
   inp = strip_formatting.strip(inp).split(' ')
   out = []
   l = len(colors)
   for i, t in enumerate(inp):
-      out.append(colors[i % l][1] + t)
+      out.append(col[i % l][1] + t)
   return ' '.join(out)
+
+@hook.command
+def usa(inp):
+  c = [colors['red'], '\x0300', colors['blue']]
+  l = len(c)
+  out = ''
+  for i, t in enumerate(inp):
+    out += c[i % l] + t
+  return out
 
 
 #------------------------------------------------------------------------------
@@ -71,10 +85,11 @@ def ruin(inp):
     (0x20D0, 0x20F0)
   ]
   out = u''
+  l = len(inp)
   for ind, c in enumerate(inp):
     out += c
-    for i in range(ind/2):
-      if randint(0, 70) > 69:
+    if randint(0, l) < ind:
+      for i in range(ind/4):
         out += unichr(randint(*choice(sets)))
   return out
 
