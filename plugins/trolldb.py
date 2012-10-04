@@ -2,9 +2,10 @@ from util import hook
 from random import choice
 import re
 
-lines = [l for l in open('plugins/trolldb.txt', 'r').read().split('%') if len(l) < 500]
+# we got some serious newline problems
+lines = [l for l in open('plugins/trolldb.txt', 'Ur').read().split('%') if len(l) < 500]
 
-goonlines = [l for l in open('plugins/fatgoon.txt', 'r').read().split('%') if len(l) < 500]
+goonlines = [l for l in open('plugins/fatgoon.txt', 'Ur').read().split('%') if len(l) < 500]
 
 @hook.command(autohelp=False)
 def truth(inp, say=None):
