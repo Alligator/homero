@@ -80,11 +80,23 @@ def pipe(inp, db=None, input=None, bot=None):
   for cmd in cmds:
     nxt = Fifo()
 
+    cmd = cmd.strip()
+
+    if cmd[0] == '"' and cmd[-1] == '"':
+      cmd = cmd[1:-1]
+      output.push(strip_formatting.strip(cmd))
+      continue
+
     func_name, args = split_cmd(cmd)
 
     # if the first word doesnt map to a func push the whole thing into the queue
     try:
-      func = [i[0] for i in bot.plugs['command'] if i[1]['name'].startswith(func_name)][0]
+      funcs = [i[0] for i in bot.plugs['command'] if i[1]['name'].startswith(func_name)]
+      if len(funcs) > 1:
+        funcs = [f.func_name for f in funcs]
+        say("did you mean %s or %s?" % (', '.join(funcs[:-1]), funcs[-1]))
+        return
+      func = funcs[0]
     except IndexError, e:
       output.push(strip_formatting.strip(cmd))
       continue
@@ -101,7 +113,7 @@ def pipe(inp, db=None, input=None, bot=None):
 
     output = nxt
 
-  if len(output) > 10:
+  if len(output) > 25:
     say('woah too many lines (%s)' % len(output))
   else:
     for line in output:
