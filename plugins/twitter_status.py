@@ -11,6 +11,6 @@ def twitter_status(match):
 
   at_name = result['user']['screen_name']
   full_name = result['user']['name']
-  tweet_text = result['text']
+  tweet_text = result['text'].replace('\n', ' ')
 
   return "\x02@" + at_name + " \x02(" + full_name + ") - " + tweet_text

@@ -22,7 +22,7 @@ colors = OrderedDict([
 
 @hook.command
 def rainbow(inp):
-  inp = str(inp)
+  inp = unicode(inp)
   col = colors.items()
   out = ""
   l = len(colors)
@@ -32,7 +32,7 @@ def rainbow(inp):
 
 @hook.command
 def wrainbow(inp):
-  inp = str(inp)
+  inp = unicode(inp)
   col = colors.items()
   inp = strip_formatting.strip(inp).split(' ')
   out = []

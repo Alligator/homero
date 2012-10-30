@@ -1,82 +1,69 @@
 from util import hook
-import datetime
-import jinja2
-import cPickle as pickle
-import os
+import time
+import json
 
-posters = {}
-total = 0
+# ok let me write this down
+#
+# from and to being the nicks switching from and to
+# if to exists do nothing, the stats will get added to this nick
+# if to doesn't exists add to as an alias to from
+#
+
+class Stats(object):
+  def __init__(self):
+    try:
+      self.stats = json.loads(open('/var/www/stats.json', 'r').read())
+    except Exception, e:
+      self.stats = []
+
+  def get(self, nick):
+    for i, user in enumerate(self.stats):
+      if nick in user['aliases']:
+        return i
+    self.stats.append({
+      'aliases': [nick],
+      'posts': []
+    })
+    return len(self.stats) - 1
+
+  def add_post(self, nick):
+    self.stats[self.get(nick)]['posts'].append(time.time())
+    self.write()
+
+  def exists(self, nick):
+    for user in self.stats:
+      if nick in user['aliases']:
+        return True
+    return False
+
+  def nick_change(self, frm, to):
+    if not self.exists(to):
+      i = self.get(frm)
+      if to not in self.stats[i]:
+        self.stats[i]['aliases'].append(to)
+      self.write()
+
+  def write(self):
+    j = json.dumps(self.stats)
+    open('/var/www/stats.json', 'w').write(j)
+
+stats = Stats();
 
 @hook.singlethread
 @hook.event('PRIVMSG')
-def ircstats(paraml, input=None, bot=None):
-    if not input['chan'] == '#sa-minecraft':
-        return
+def ircstats(paraml, input=None, nick=None, bot=None):
+  if input['chan'] != '#sa-minecraft':
+    return
 
-    global posters
-    global total
-
-    # we gotsa ta unpickle
-    if not posters:
-        try:
-            f = open(os.path.join(bot.persist_dir, 'ircstats.pkl'), 'rb')
-            posters = pickle.load(f)
-            total = pickle.load(f)
-            f.close()
-        except Exception, e:
-            # im so sorry
-            pass
-
-    now = datetime.datetime.utcnow()
-    past = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
-
-    # put the data in the dict
-    nick = input['nick']
-    posters.setdefault(nick, {"total_posts": 0, "hours_active": []})
-    posters[nick]['total_posts'] += 1
-    posters[nick]['hours_active'].append(now)
-
-    total += 1
-
-    # trim the old values
-    for i, time in enumerate(posters[nick]['hours_active']):
-        if time < past:
-            del posters[nick]['hours_active'][i]
-            posters[nick]['total_posts'] -= 1
-            total -= 1
-
-    # convert the data to the format we want for the template
-    posters_out = {}
-
-    for p in posters.keys():
-        posters_out.setdefault(p, {"total_posts": 0, "hours_active": []})
-        posters_out[p]['total_posts'] = posters[p]['total_posts']
-        for i in range(24):
-            posters_out[p]['hours_active'].append([x.hour for x in posters[p]['hours_active']].count(i))
-
-    top10 = sorted(posters_out.iteritems(), key=lambda x: x[1]['total_posts'], reverse=True)[:10]
-    sort = {'posters': top10, 'total': sum([n[1]['total_posts'] for n in top10]), 'now': now.hour}
-
-    # make a template
-    env = jinja2.Environment(loader=jinja2.FileSystemLoader('/var/www/ircstats/templates'))
-    temp = env.get_template('index.html')
-    f = open('/var/www/ircstats/index.html', 'w')
-    f.write(temp.render(**sort))
-
-    # remove people with 0 posts
-    for key, val in posters.iteritems():
-        if val['total_posts'] == 0:
-            del posters[key]
-
-    # pickle the dict
-    f = open(os.path.join(bot.persist_dir, 'ircstats.pkl'), 'wb')
-    pickle.dump(posters, f)
-    pickle.dump(total, f)
-    f.close()
+  global stats
+  stats.add_post(nick)
 
 @hook.event('NICK')
-def nickchange(paraml, nick=None, chan=None):
-    if not chan == '#sa-minecraft':
-        return
-    posters[paraml[0]] = posters[nick]
-    del posters[nick]
+def nickchange(paraml, input=None, nick=None):
+  if input['chan'] != '#sa-minecraft':
+    return
+
+  global stats
+  stats.nick_change(nick, paraml[0])
+  # nick = old nick
+  # paraml[0] = new nick

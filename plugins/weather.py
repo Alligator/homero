@@ -1,12 +1,11 @@
 from util import hook, http
+from urllib2 import quote
 
 @hook.command(autohelp=False)
 def weather(inp, nick=None, reply=None, db=None, bot=None):
   'weather'
   # init the db
   db.execute('create table if not exists weather(nick primary key, loc)')
-
-  api_url = 'http://api.wunderground.com/api/{0}/conditions/q/'.format(bot.config['api_keys']['wunderground'])
 
   # location and dontsave
   dontsave = inp.endswith(' dontsave')
@@ -18,27 +17,26 @@ def weather(inp, nick=None, reply=None, db=None, bot=None):
     inp = db.execute('select loc from weather where nick=lower(?)', (nick,)).fetchone()
     # no location in db
     if not inp:
-      return weather.__doc__
+      return '¿not in the db?'
     inp = inp[0]
   # just location
   elif not dontsave:
     db.execute('insert or replace into weather(nick, loc) values (?,?)', (nick.lower(), inp))
     db.commit()
 
-  response = http.get_json(api_url + inp + '.json')
-  try:
-    return response['response']['error']['description']
-  except KeyError, e:
-    pass
+  api_url = 'http://api.aerisapi.com/observations/{0}?client_id={1}&client_secret={2}'.format(quote(inp), bot.config['api_keys']['aeris_id'], bot.config['api_keys']['aeris_secret'])
 
-  # if we get multiple matches pick the first and re-request
-  try:
-    matches = response['response']['results']
-    response = http.get_json(api_url + 'zmw:' + matches[0]['zmw'] + '.json')
-    print response
-  except KeyError, e:
-    pass
+  w = http.get_json(api_url)
+  if w['success']:
+    w = w['response']
+    p = w['place']
+    o = p['name'].capitalize() + ', '
+    if p['state']:
+      o += p['state'].capitalize() + ', '
+    o += p['country'].upper()
 
-  name = response['current_observation']['display_location']['full']
+    ob = w['ob']
 
-  return '{name} - {weather}, {temperature_string}'.format(name=name, **response['current_observation'])
+    return '{0}: {1} ({2}C/{3}F) {4}% humidity'.format(o, ob['weather'], ob['tempC'], ob['tempF'], ob['humidity'])
+  else:
+    return 'not found'
