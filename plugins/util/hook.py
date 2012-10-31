@@ -79,6 +79,17 @@ def event(arg=None, **kwargs):
             args['events'] = arg.split()
         return event_wrapper
 
+def time(arg=None, **kwargs):
+  args = kwargs
+
+  def event_wrapper(func):
+    args['name'] = func.func_name;
+    args['timeout'] = arg
+    _hook_add(func, ['time', (func, args)], 'time')
+    return func
+
+  return event_wrapper
+
 
 def singlethread(func):
     func._thread = True

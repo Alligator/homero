@@ -188,3 +188,12 @@ def main(conn, out):
                 input.inp = m
 
                 dispatch(input, "regex", func, args)
+
+def dispatch_time(conn, time):
+  for i, event in enumerate(bot.time_events):
+    func, args, last = event
+    if last == 0:
+      bot.time_events[i][-1] = time
+    elif time - last >= args['timeout']:
+      bot.time_events[i][-1] = time
+      dispatch(Input(conn,None,None,None,None,None,None,None, [''], None), 'time', func, args)

@@ -4,6 +4,7 @@ import os
 import re
 import sys
 import traceback
+from pprint import pprint
 
 
 if 'mtimes' not in globals():
@@ -142,6 +143,10 @@ def reload_plugs(init=False):
         for func, args in bot.plugs['event']:
             for event in args['events']:
                 bot.events[event].append((func, args))
+
+        bot.time_events = []
+        for func, args in bot.plugs['time']:
+          bot.time_events.append([func, args, 0])
 
     if init:
         print '  plugin listing:'

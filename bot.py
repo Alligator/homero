@@ -6,6 +6,7 @@ import os
 import Queue
 import sys
 import time
+from math import floor
 
 sys.path += ['plugins']  # so 'import hook' works without duplication
 sys.path += ['lib']
@@ -53,6 +54,8 @@ if not os.path.exists(bot.persist_dir):
 
 print 'Running main loop'
 
+last = floor(time.time())
+
 while True:
     reload()  # these functions only do things
     config()  # if changes have occured
@@ -65,3 +68,7 @@ while True:
             pass
     while all(conn.out.empty() for conn in bot.conns.itervalues()):
         time.sleep(.1)
+        if floor(time.time() - last) >= 10:
+          last = floor(time.time())
+          for conn in bot.conns.itervalues():
+            dispatch_time(conn, last)
