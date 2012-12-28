@@ -17,7 +17,7 @@ def weather(inp, nick=None, reply=None, db=None, bot=None):
     inp = db.execute('select loc from weather where nick=lower(?)', (nick,)).fetchone()
     # no location in db
     if not inp:
-      return '¿not in the db?'
+      return 'not in the db?'
     inp = inp[0]
   # just location
   elif not dontsave:

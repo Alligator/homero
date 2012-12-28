@@ -67,7 +67,10 @@ def run(func, input):
     else:
         out = func(input.inp)
     if out is not None:
-        input.reply(unicode(out))
+        try:
+            input.reply(unicode(out, 'utf-8', 'replace'))
+        except TypeError, e:
+            input.reply(out)
 
 
 def do_sieve(sieve, bot, input, func, type, args):

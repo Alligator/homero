@@ -1,69 +1,82 @@
 from util import hook
-import time
+
+from datetime import datetime
 import json
 
-# ok let me write this down
-#
-# from and to being the nicks switching from and to
-# if to exists do nothing, the stats will get added to this nick
-# if to doesn't exists add to as an alias to from
-#
+# ok so it's gonna be a dictionary like this:
+# {
+#   sponge: {
+#     aliases: <list of aliases>,
+#     lines: <list of lines>
+#   }
+# }
+# 
+# keys are current nick, if a nick changes the value get assigned to a new key and the old key is added to the aliases list
+# 
 
-class Stats(object):
-  def __init__(self):
+class IRCStats(object):
+  def __init__(self, path):
+    self.path = path
     try:
-      self.stats = json.loads(open('/var/www/stats.json', 'r').read())
+      self.stats = json.loads(open(self.path, 'r').read())
     except Exception, e:
-      self.stats = []
+      self.stats = {
+        'users': {},
+        'daily': [0]*24*7
+      }
 
-  def get(self, nick):
-    for i, user in enumerate(self.stats):
-      if nick in user['aliases']:
-        return i
-    self.stats.append({
-      'aliases': [nick],
-      'posts': []
+  # JSON makes defaultdict weird, roll yer own
+  def add(self, nick):
+    return self.stats['users'].setdefault(nick, {
+      'aliases': [],
+      'lines': [0]*24
     })
-    return len(self.stats) - 1
 
-  def add_post(self, nick):
-    self.stats[self.get(nick)]['posts'].append(time.time())
+  def new_line(self, nick, hour, day):
+    self.add(nick)
+    self.stats['users'][nick]['lines'][hour] += 1
+    self.stats['daily'][hour + (day*24)] += 1
     self.write()
 
-  def exists(self, nick):
-    for user in self.stats:
-      if nick in user['aliases']:
-        return True
-    return False
+  def nick_change(self, old, new):
+    # if the new nick is already there just use it
+    if new in self.stats['users']:
+      return
 
-  def nick_change(self, frm, to):
-    if not self.exists(to):
-      i = self.get(frm)
-      if to not in self.stats[i]:
-        self.stats[i]['aliases'].append(to)
-      self.write()
+    # switch to new key
+    self.stats['users'][new] = self.stats['users'][old]
+    del self.stats['users'][old]
+
+    # add old key to aliases
+    if old not in self.stats['users'][new]['aliases']:
+      self.stats['users'][new]['aliases'].append(old)
+
+    # remove new nick from anyone else who might have it
+    for user, data in self.stats['users'].iteritems():
+      if new in data['aliases']:
+        data['aliases'].remove(new)
+
+    self.write()
 
   def write(self):
-    j = json.dumps(self.stats)
-    open('/var/www/stats.json', 'w').write(j)
+    open(self.path, 'w').write(json.dumps(self.stats))
 
-stats = Stats();
+  def __str__(self):
+    return str(dict(self.users))
 
-@hook.singlethread
+stats = IRCStats('/var/www/stats.json')
+
 @hook.event('PRIVMSG')
-def ircstats(paraml, input=None, nick=None, bot=None):
-  if input['chan'] != '#sa-minecraft':
+def irc_msg(paraml, nick=None, chan=None):
+  if chan != '#sa-minecraft':
     return
-
-  global stats
-  stats.add_post(nick)
+  d = datetime.now().utctimetuple()
+  hour = d.tm_hour
+  day = d.tm_wday
+  stats.new_line(nick, hour, day)
 
 @hook.event('NICK')
-def nickchange(paraml, input=None, nick=None):
-  if input['chan'] != '#sa-minecraft':
+def irc_nickchange(paraml, nick=None, chan=None):
+  if chan != '#sa-minecraft':
     return
-
-  global stats
   stats.nick_change(nick, paraml[0])
-  # nick = old nick
-  # paraml[0] = new nick
