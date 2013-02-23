@@ -113,7 +113,7 @@ def pipe(inp, db=None, input=None, bot=None):
 
     output = nxt
 
-  if len(output) > 25:
+  if len(output) > 20:
     say('woah too many lines (%s)' % len(output))
   else:
     for line in output:

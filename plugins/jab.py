@@ -4,6 +4,19 @@ fancy = u"\u0B9C\u06E9\u06DE\u06E9\u0B9C"
 fill = u"\u25AC"
 
 @hook.command
+def script(inp):
+  out = ''
+  for c in inp:
+    n = ord(c)
+    if n > 64 and n < 91:
+      out += unichr(n + 120107)
+    elif n > 96 and n < 123:
+      out += unichr(n + 119841)
+    else:
+      out += c
+  return out
+
+@hook.command
 def jab(inp):
     if len(inp) == 0: return
     passchars = [2, 15, 18, 29, 31, 32]

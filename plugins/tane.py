@@ -19,6 +19,8 @@ def tane_event(paraml, conn=None):
 
 @hook.command
 def tane(inp, say=None):
+    say(rainbow('death comes to us all'))
+    return
     say(rainbow("I CAN'T WAIT"))
     say('http://tane.us/weekend.html')
     say(rainbow("FOR THE WEEKEND TO BEGIN"))
