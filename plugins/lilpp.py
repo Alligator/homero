@@ -19,8 +19,17 @@ def sponge(inp, say=None):
         "shadow",
         "robot man",
         "zombie island",
-        "black wrestler"
+        "black wrestler",
+        "small project",
+        "fun",
+        "lilpp",
+        "brink",
+        "rammstein",
+        "marry oh",
+        "pug",
+        "quake live"
         ]
-    say("<sponge-> i hate " + choice(spongeList))
+    
+    say("<sponge-> i {0} {1}".format(("love" if (randint(0,2) == 0) else "hate"),choice(spongeList)))
     return
 
