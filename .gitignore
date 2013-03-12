@@ -8,3 +8,4 @@ pep8.py
 .pydevproject
 *.db
 web
+*.ignore.py
