@@ -1,42 +1,101 @@
+"weather, thanks to wunderground"
+
 from util import hook, http
-from urllib2 import quote
+
 
 @hook.command(autohelp=False)
-def weather(inp, nick=None, reply=None, db=None, bot=None):
-  'weather'
-  # init the db
-  db.execute('create table if not exists weather(nick primary key, loc)')
+def weather(inp, nick='', server='', bot=None, reply=None, db=None):
+    ".weather <location> [dontsave] -- gets weather data from Wunderground "\
+            "http://wunderground.com/weather/api"
 
-  # location and dontsave
-  dontsave = inp.endswith(' dontsave')
-  if inp and dontsave:
-    inp = inp[:-9].strip().lower()
+    api_key = bot.config['api_keys']['wunderground']
 
-  # no location:
-  if not inp:
-    inp = db.execute('select loc from weather where nick=lower(?)', (nick,)).fetchone()
-    # no location in db
-    if not inp:
-      return 'not in the db?'
-    inp = inp[0]
-  # just location
-  elif not dontsave:
-    db.execute('insert or replace into weather(nick, loc) values (?,?)', (nick.lower(), inp))
-    db.commit()
+    loc = inp
 
-  api_url = 'http://api.aerisapi.com/observations/{0}?client_id={1}&client_secret={2}'.format(quote(inp), bot.config['api_keys']['aeris_id'], bot.config['api_keys']['aeris_secret'])
+    dontsave = loc.endswith(" dontsave")
+    if dontsave:
+        loc = loc[:-9].strip().lower()
 
-  w = http.get_json(api_url)
-  if w['success']:
-    w = w['response']
-    p = w['place']
-    o = p['name'].capitalize() + ', '
-    if p['state']:
-      o += p['state'].capitalize() + ', '
-    o += p['country'].upper()
+    db.execute("create table if not exists weather(nick primary key, loc)")
 
-    ob = w['ob']
+    if not loc:  # blank line
+        loc = db.execute("select loc from weather where nick=lower(?)",
+                            (nick,)).fetchone()
+        if not loc:
+            return weather.__doc__
+        loc = loc[0]
 
-    return '{0}: {1} ({2}C/{3}F) {4}% humidity'.format(o, ob['weather'], ob['tempC'], ob['tempF'], ob['humidity'])
-  else:
-    return 'not found'
+    loc, _, state = loc.partition(', ')
+
+    # Check to see if a lat, long pair is being passed. This could be done more
+    # completely with regex, and converting from DMS to decimal degrees. This
+    # is nice and simple, however.
+    try:
+        float(loc)
+        float(state)
+
+        loc = loc + ',' + state
+        state = ''
+    except ValueError:
+        if state:
+            state = http.quote_plus(state)
+            state += '/'
+
+        loc = http.quote_plus(loc)
+
+    url = 'http://api.wunderground.com/api/'
+    query = '{key}/geolookup/conditions/forecast/q/{state}{loc}.json' \
+            .format(key=api_key, state=state, loc=loc)
+    url += query
+
+    try:
+        parsed_json = http.get_json(url)
+    except IOError:
+        print 'Could not get data from Wunderground'
+        return None
+
+    info = {}
+    if 'current_observation' not in parsed_json:
+        resp = 'Could not find weather for {inp}. '.format(inp=inp)
+
+        # In the case of no observation, but results, print some possible
+        # location matches
+        if 'results' in parsed_json['response']:
+            resp += 'Possible matches include: '
+            results = parsed_json['response']['results']
+
+            for place in results[:6]:
+                resp += '{city} '.format(**place)
+
+                if place['state']:
+                    resp += '{state} '.format(**place)
+
+                if place['country_name']:
+                    resp += '{country_name}, '.format(**place)
+
+            resp = resp[:-2]
+
+        reply(resp)
+        return
+
+    obs = parsed_json['current_observation']
+    sf = parsed_json['forecast']['simpleforecast']['forecastday'][0]
+    info['city'] = obs['display_location']['full']
+    info['t_f'] = obs['temp_f']
+    info['t_c'] = obs['temp_c']
+    info['weather'] = obs['weather']
+    info['h_f'] = sf['high']['fahrenheit']
+    info['h_c'] = sf['high']['celsius']
+    info['l_f'] = sf['low']['fahrenheit']
+    info['l_c'] = sf['low']['celsius']
+    info['humid'] = obs['relative_humidity']
+    info['wind'] = 'Wind: {mph}mph/{kph}kph'\
+            .format(mph=obs['wind_mph'], kph=obs['wind_kph'])
+    reply('{city}: {weather}, {t_f}F/{t_c}C'\
+            ' (H:{h_f}F/{h_c}C L:{l_f}F/{l_c}C)' \
+            ', Humidity: {humid}, {wind}'.format(**info))
+
+    if inp and not dontsave:
+        db.execute("insert or replace into weather(nick, loc) values (?,?)",
+                     (nick.lower(), loc))
+        db.commit()
