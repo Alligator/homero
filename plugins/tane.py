@@ -1,4 +1,5 @@
 from util import hook, strip_formatting
+from collections import OrderedDict
 from datetime import datetime
 import re
 
@@ -19,17 +20,33 @@ def tane_event(paraml, conn=None):
 
 @hook.command
 def tane(inp, say=None):
-    say(rainbow('death comes to us all'))
-    return
-    say(rainbow("I CAN'T WAIT"))
-    say('http://tane.us/weekend.html')
-    say(rainbow("FOR THE WEEKEND TO BEGIN"))
+    today = datetime.today()
+    if today.weekday() == 4:
+      say(rainbow("I CAN'T WAIT"))
+      say('http://tane.us/weekend.html')
+      say(rainbow("FOR THE WEEKEND TO BEGIN"))
+    else:
+      return rainbow('с м е р т ь   ж д е т   в с е х   н а с')
 
-def rainbow(text):
-    c =['\x0304', '\x0307', '\x0309', '\x0310', '\x0306']
-    text = strip_formatting.strip(text)
-    out = ""
-    l = len(c)
-    for i, t in enumerate(text):
-        out += c[i % l] + t
-    return out
+colors = OrderedDict([
+  ('red',    '\x0304'),
+  ('ornage', '\x0307'),
+  ('yellow', '\x0308'),
+  ('green',  '\x0309'),
+  ('cyan',   '\x0303'),
+  ('ltblue', '\x0310'),
+  ('rylblue','\x0312'),
+  ('blue',   '\x0302'),
+  ('magenta','\x0306'),
+  ('pink',   '\x0313'),
+  ('maroon', '\x0305')
+])
+def rainbow(inp):
+  inp = inp.decode('utf-8')
+  inp = strip_formatting.strip(inp)
+  col = colors.items()
+  out = ""
+  l = len(colors)
+  for i, t in enumerate(inp):
+      out += col[i % l][1] + t
+  return out
