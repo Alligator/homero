@@ -4,6 +4,12 @@ from util import hook
 from util import http
 
 @hook.command
+def city(inp):
+  jsonData = http.get_json('http://www.reddit.com/r/cityporn/.json')
+  j= random.choice(jsonData['data']['children'])['data']
+  return j['title'] + ' ' + j['url']
+
+@hook.command
 def hyle(inp, say=None):
     subreddit = [
     "conspiracy",
@@ -12,7 +18,7 @@ def hyle(inp, say=None):
     "crime",
     ]
 
-    if random.random() > 0.075:
+    if random.random() > 0.1:
         jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
         say('<hyle> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
     else:
