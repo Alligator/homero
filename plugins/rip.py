@@ -1,21 +1,30 @@
 from util import hook, strip_formatting
+from textwrap import wrap
+
+WIDTH = 40
 
 @hook.command
 def rip(inp, say=None):
   og = inp
   inp = inp.encode('utf-8')
-  topfiller = str.center('', len(strip_formatting.strip(og))-3, '-')
+  width = WIDTH + 4
 
-  top = '  _.' + topfiller + '-._\n'
+  if len(inp) > WIDTH:
+    txt = wrap(inp, WIDTH)
+  else:
+    width = len(inp) + 4
+    txt = [inp]
 
-  width = len(top)-3
+  topfiller = str.center('', width-5, '-')
 
-  rip = ' |' + str.center('RIP', width) + '|\n'
-  nmr = ' |' + str.center(inp.upper(), width) + '|\n'
-  lsr = ' |' + str.center('', width, '_') + '|\n'
-  btm = '|' + str.center('', width+2, '_') + '|'
+  headstone = []
+  headstone.append('  _.' + topfiller + '-._\n')
+  headstone.append(' |' + str.center('RIP', width) + '|\n')
+  for line in txt:
+    headstone.append(' |' + str.center(line.upper(), width) + '|\n')
+  headstone.append(' |' + str.center('', width, '_') + '|\n')
+  headstone.append('|' + str.center('', width+2, '_') + '|')
 
-  headstone = [top, rip, nmr, lsr, btm]
   for l in headstone:
     say(l.decode('utf-8'))
 
