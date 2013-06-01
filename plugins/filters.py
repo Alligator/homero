@@ -90,7 +90,7 @@ def ruin(inp):
   l = len(inp)
   for ind, c in enumerate(inp):
     out += c
-    if randint(0, l) < ind:
+    if randint(0, l) < ind + 1:
       for i in range(ind/4):
         out += unichr(randint(*choice(sets)))
   return out
