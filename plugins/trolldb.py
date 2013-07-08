@@ -21,7 +21,6 @@ def jerk(inp, say=None):
   say(h.unescape(choice(jerklines)))
 
 @hook.command(autohelp=False)
-@hook.command('danl')
 def fatgoon(inp, say=None):
     say(re.sub('\n', '', choice(goonlines)))
     return

@@ -8,7 +8,7 @@ def bully(inp, say=None):
   say('{}: I feel offended by your recent action(s). Please read http://stop-irc-bullying.eu/stop'.format(inp))
 
 @hook.command(adminonly=True)
-def allbully(inp, chan=None, conn=None, say=None):
+def bullyall(inp, chan=None, conn=None, say=None):
   if chan.startswith('#'):
     conn.cmd('NAMES {}'.format(chan))
     sleep(2) # im the worst

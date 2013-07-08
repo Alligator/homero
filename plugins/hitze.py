@@ -10,12 +10,24 @@ def city(inp):
   return j['title'] + ' ' + j['url']
 
 @hook.command
+def danl(inp, say=None):
+    subreddit = [
+      "TheRedPill",
+      'seduction',
+    ]
+
+    jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
+    say('<danl> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
+
+@hook.command
 def hyle(inp, say=None):
     subreddit = [
     "conspiracy",
     "twinpeaks",
     "mensrights",
     "crime",
+    'Futurology',
+    'conspiro',
     ]
 
     if random.random() > 0.1:

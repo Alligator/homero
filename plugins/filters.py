@@ -76,7 +76,10 @@ def capwords(inp):
 def bubble(inp):
   out = unicode()
   for c in inp:
-    out += c + unichr(0x020DD)
+    print c
+    if not c == ' ':
+      out += c + unichr(0x020DD)
+    out += ' '
   return out
 
 @hook.command
