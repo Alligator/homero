@@ -6,29 +6,42 @@ import time
 from collections import defaultdict
 from random import choice
 from urllib2 import HTTPError, unquote
+from twython import Twython
 
 from util import hook, http
 
 cache = {}
 
-def get_cached(name):
+token = None
+
+def init(key, secret):
+  global token
+  if not token:
+    token = Twython(key, secret, oauth_version=2).obtain_access_token()
+
+def get_tweets(key, name):
+  twitter = Twython(key, access_token=token)
+  return twitter.get_user_timeline(screen_name=name, count=200)
+
+
+def get_cached(name, bot):
   global imi_cache
-  url = "http://api.twitter.com/1/statuses/user_timeline/%s.json?count=300" % name
+  init(bot.config['api_keys']['twitter_key'], bot.config['api_keys']['twitter_secret'])
   if name in cache and time.time() - cache[name][0] + 60 * 60 * 24 > 0:
     print name, 'in cache'
     return cache[name][1]
-  text = '. '.join([t['text'] for t in http.get_json(url)]) + '.'
+  text = '. '.join([t['text'] for t in get_tweets(bot.config['api_keys']['twitter_key'], name)]) + '.'
   cache[name] = (time.time(), text)
   print name, 'not in cache'
   return text
 
 @hook.command
-def imitate(inp):
+def imitate(inp, bot=None):
   ".imitate <account> -- use a markov text generator to imiatate a twitter account"
   text = ''
   for name in inp.split():
     try:
-      text += get_cached(name)
+      text += get_cached(name, bot)
     except HTTPError, e:
       if e.code == 404:
         return "user not found"
