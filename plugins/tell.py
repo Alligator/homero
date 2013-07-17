@@ -91,7 +91,7 @@ def tell(inp, nick='', chan='', db=None):
     db_init(db)
 
     if db.execute("select count() from tell where user_to=?",
-                    (user_to,)).fetchone()[0] >= 5:
+                    (user_to,)).fetchone()[0] >= 10:
         return "That person has too many things queued."
 
     try:
