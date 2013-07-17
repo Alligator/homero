@@ -14,29 +14,12 @@ def danl(inp, say=None):
     subreddit = [
       "TheRedPill",
       'seduction',
+      'CuckoldCommunity',
     ]
 
     jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
     say('<danl> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
 
-@hook.command
-def hyle(inp, say=None):
-    subreddit = [
-    "conspiracy",
-    "twinpeaks",
-    "mensrights",
-    "crime",
-    'Futurology',
-    'conspiro',
-    ]
-
-    if random.random() > 0.1:
-        jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
-        say('<hyle> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
-    else:
-        jsonData = http.get_json('http://www.reddit.com/r/ass.json')
-        say('<hyle> ' + random.choice(jsonData['data']['children'])['data']['url'])
-        say('<hyle> ass  like  that')
 
 @hook.regex('oh my god')
 def omg(inp, say=None):
