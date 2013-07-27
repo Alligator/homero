@@ -5,6 +5,7 @@ WIDTH = 40
 
 @hook.command
 def rip(inp, say=None):
+  if inp == '': return
   og = inp
   inp = inp.encode('utf-8')
   width = WIDTH + 4
