@@ -45,10 +45,5 @@ def listhyle(inp):
 def hyle(inp, say=None):
   global subreddits
 
-  if random.random() > 0.05:
-    jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddits) + '/.json')
-    say('<hyle> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
-  else:
-    jsonData = http.get_json('http://www.reddit.com/r/ass.json')
-    say('<hyle> ' + random.choice(jsonData['data']['children'])['data']['url'])
-    say('<hyle> ass  like  that')
+  jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddits) + '/.json')
+  say('<hyle> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
