@@ -11,14 +11,13 @@ def city(inp):
 
 @hook.command
 def danl(inp, say=None):
-    subreddit = [
-      "TheRedPill",
-      'seduction',
-      'CuckoldCommunity',
-    ]
-
-    jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
-    say('<danl> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
+  subreddit = [
+    "TheRedPill",
+    'seduction',
+    'CuckoldCommunity',
+  ]
+  jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
+  say('<danl> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
 
 
 @hook.regex('oh my god')
