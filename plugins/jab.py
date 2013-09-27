@@ -33,6 +33,8 @@ def jab(inp):
                 out += inp[i+2]
                 e.next()
             e.next()
+        elif ord(c) == 32:
+            out += u'\u3000'
         elif ord(c) in passchars:
             out += c
         elif ord(c) <= 31:
