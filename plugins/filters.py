@@ -21,6 +21,10 @@ colors = OrderedDict([
 ])
 
 @hook.command
+def rot13(inp):
+  return inp.encode('rot13')
+
+@hook.command
 def rainbow(inp):
   inp = unicode(inp)
   inp = strip_formatting.strip(inp)
