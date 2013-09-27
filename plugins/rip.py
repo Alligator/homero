@@ -6,6 +6,7 @@ WIDTH = 40
 @hook.command
 def rip(inp, say=None):
   if inp == '': return
+  inp = inp.strip()
   og = inp
   inp = inp.encode('utf-8')
   width = WIDTH + 4
@@ -31,6 +32,7 @@ def rip(inp, say=None):
 
 @hook.command
 def bread(inp, say=None):
+  inp = inp.strip()
   og = inp
   inp = inp.encode('utf-8')
   topfiller = str.center('', len(strip_formatting.strip(og))-1, '-')
