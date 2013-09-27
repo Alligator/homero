@@ -19,7 +19,7 @@ names = [
     'Dave',
 ]
 
-@hook.event('PRIVMSG')
+# @hook.event('PRIVMSG')
 def mike(paraml, inp=None, say=None, chan=None):
     global last
 
