@@ -12,6 +12,6 @@ def trek(inp):
             try:
                 count = int(x)
             except ValueError:
-                character = x
+                character = x.lower()
         r = treksum.generate_sentence(word_count=count, character=character)
         return r
