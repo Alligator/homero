@@ -32,4 +32,4 @@ def oneyearago(inp, chan=None, say=None):
   idx = hours.index(line)
   for i in range(idx-2, idx+2):
     if i >= 0 and i < len(hours):
-      say(hours[i][0])
+      say(hours[i][0].decode('utf-8'))
