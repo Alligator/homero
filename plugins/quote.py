@@ -34,7 +34,6 @@ def format_quote(q, num, n_quotes):
         time.strftime("%Y-%m-%d", time.gmtime(ctime)), nick, msg)
 
 
-@hook.command('q')
 @hook.command
 def quote(inp, nick='', chan='', db=None):
     ".q/.quote [#chan] [nick] [#n]/.quote add <nick> <msg> -- gets " \
