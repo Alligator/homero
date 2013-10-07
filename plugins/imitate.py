@@ -37,7 +37,7 @@ def get_cached(name, bot):
 
 @hook.command
 def imitate(inp, bot=None):
-  ".imitate <account> -- use a markov text generator to imiatate a twitter account"
+  ".imitate <account> -- use a markov text generator to imitate a twitter account"
   text = ''
   for name in inp.split():
     try:
