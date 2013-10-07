@@ -44,8 +44,13 @@ def split_cmd(cmd):
   args = cmd[len(func)+1:].strip()
   return func, args
 
-def call(func, func_name, inp, input):
+def call(bot, func, func_name, inp, input):
   # mostly copy/pasted from main.py
+  func, a = func
+  for sieve, in bot.plugs['sieve']:
+    input = sieve(bot, input, func, 'command', a)
+  if input == None:
+    return input
   args = func._args
   if args:
     if 'db' in args and 'db' not in input:
@@ -61,6 +66,18 @@ def call(func, func_name, inp, input):
   else:
     return func(inp)
 
+# stolen from main.py
+def match_command(command, bot):
+    commands = list(bot.commands)
+
+    # do some fuzzy matching
+    prefix = filter(lambda x: x.startswith(command), commands)
+    if len(prefix) == 1:
+        return prefix[0]
+    elif prefix and command not in prefix:
+        return prefix
+
+    return command
 
 @hook.command
 def pipe(inp, db=None, input=None, bot=None):
@@ -106,18 +123,18 @@ def pipe(inp, db=None, input=None, bot=None):
     func_name, args = split_cmd(cmd)
 
     # if the first word doesnt map to a func push the whole thing into the queue
-    # also do this is we just have a string
+    # also do this if we just have a string
     if cmd[0] == '"' and cmd[-1] == '"':
       output.push(strip_formatting.strip(cmd)[1:-1])
       continue
     else:
       try:
-        funcs = [i[0] for i in bot.plugs['command'] if i[1]['name'].startswith(func_name)]
-        if len(funcs) > 1:
-          funcs = [f.func_name for f in funcs]
-          say("did you mean %s or %s?" % (', '.join(funcs[:-1]), funcs[-1]))
+        command = match_command(func_name, bot)
+        if isinstance(command, list):
+          say("did you mean %s or %s?" %
+                      (', '.join(command[:-1]), command[-1]))
           return
-        func = funcs[0]
+        func = bot.commands[command]
       except IndexError, e:
         output.push(strip_formatting.strip(cmd))
         continue
@@ -128,7 +145,7 @@ def pipe(inp, db=None, input=None, bot=None):
       output.push(args)
 
     for line in output:
-      res = call(func, func_name, line, input)
+      res = call(bot, func, func_name, line, input)
       if res:
         nxt.push(res)
 
