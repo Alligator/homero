@@ -9,7 +9,7 @@ lines = [l for l in open('plugins/trolldb.txt', 'Ur').read().split('%') if len(l
 jerklines = open('plugins/jerk.txt', 'Ur').readlines()
 h = HTMLParser.HTMLParser()
 
-goonlines = [l for l in open('plugins/fatgoon.txt', 'Ur').read().split('%') if len(l) < 500]
+goonlines = [l for l in open('plugins/fatgoon.txt', 'Ur').read().split('---') if len(l) < 500]
 
 deeplines = [l.strip().split('\n') for l in open('plugins/deepthoughts.txt', 'Ur').read().split('%')]
 
