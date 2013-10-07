@@ -8,7 +8,7 @@ import string
 
 colors = OrderedDict([
   ('red',    '\x0304'),
-  ('ornage', '\x0307'),
+  ('orange', '\x0307'),
   ('yellow', '\x0308'),
   ('green',  '\x0309'),
   ('cyan',   '\x0303'),
@@ -19,6 +19,38 @@ colors = OrderedDict([
   ('pink',   '\x0313'),
   ('maroon', '\x0305')
 ])
+
+@hook.command
+def red(inp): return color('red %s' % inp)
+@hook.command
+def orange(inp): return color('orange %s' % inp)
+@hook.command
+def yellow(inp): return color('yellow %s' % inp)
+@hook.command
+def green(inp): return color('green %s' % inp)
+@hook.command
+def cyan(inp): return color('cyan %s' % inp)
+@hook.command
+def ltblue(inp): return color('ltblue %s' % inp)
+@hook.command
+def rylblue(inp): return color('rylblue %s' % inp)
+@hook.command
+def blue(inp): return color('blue %s' % inp)
+@hook.command
+def magenta(inp): return color('magenta %s' % inp)
+@hook.command
+def pink(inp): return color('pink %s' % inp)
+@hook.command
+def maroon(inp): return color('maroon %s' % inp)
+
+@hook.command
+def color(inp):
+  c = inp.split(' ')[0]
+  if c in colors:
+    return colors[c] + inp[len(c)+1:]
+  else:
+    return inp
+color.__doc__ = 'color name text - print text in color, available colors: ' + ' '.join(colors.keys())
 
 @hook.command
 def rot13(inp):
