@@ -7,47 +7,50 @@ import string
 # COLORS
 
 colors = OrderedDict([
+  ('drkred', '\x0305'),
   ('red',    '\x0304'),
   ('orange', '\x0307'),
   ('yellow', '\x0308'),
   ('green',  '\x0309'),
-  ('cyan',   '\x0303'),
-  ('ltblue', '\x0310'),
-  ('rylblue','\x0312'),
-  ('blue',   '\x0302'),
-  ('magenta','\x0306'),
+  ('drkgreen','\x0303'),
+  ('cyan',   '\x0310'),
+  ('ltcyan', '\x0311'),
+  ('drkblue','\x0302'),
+  ('blue',   '\x0312'),
   ('pink',   '\x0313'),
-  ('maroon', '\x0305')
+  ('magenta','\x0306')
 ])
 
 @hook.command
-def red(inp): return color('red %s' % inp)
+def drkred(inp): return color('drkred ' + inp)
 @hook.command
-def orange(inp): return color('orange %s' % inp)
+def red(inp): return color('red ' + inp)
 @hook.command
-def yellow(inp): return color('yellow %s' % inp)
+def orange(inp): return color('orange ' + inp)
 @hook.command
-def green(inp): return color('green %s' % inp)
+def yellow(inp): return color('yellow ' + inp)
 @hook.command
-def cyan(inp): return color('cyan %s' % inp)
+def green(inp): return color('green ' + inp)
 @hook.command
-def ltblue(inp): return color('ltblue %s' % inp)
+def drkgreen(inp): return color('drkgreen ' + inp)
 @hook.command
-def rylblue(inp): return color('rylblue %s' % inp)
+def cyan(inp): return color('cyan ' + inp)
 @hook.command
-def blue(inp): return color('blue %s' % inp)
+def ltcyan(inp): return color('ltcyan ' + inp)
 @hook.command
-def magenta(inp): return color('magenta %s' % inp)
+def drkblue(inp): return color('drkblue ' + inp)
 @hook.command
-def pink(inp): return color('pink %s' % inp)
+def blue(inp): return color('blue ' + inp)
 @hook.command
-def maroon(inp): return color('maroon %s' % inp)
+def pink(inp): return color('pink ' + inp)
+@hook.command
+def magenta(inp): return color('magenta ' + inp)
 
 @hook.command
 def color(inp):
   c = inp.split(' ')[0]
   if c in colors:
-    return colors[c] + inp[len(c)+1:]
+    return colors[c] + inp[len(c)+1:] + u'\x03'
   else:
     return inp
 color.__doc__ = 'color name text - print text in color, available colors: ' + ' '.join(colors.keys())

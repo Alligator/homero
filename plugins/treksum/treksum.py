@@ -39,7 +39,7 @@ def generate_sentence(word_count=None, character=None):
             raise ImpossibleSentenceError('Couldn\'t generate a sentence with \
                 the requested number of words.')
         # recursive callback, trying one less words each time. 
-        return generate_sentence(word_count - 1)
+        return generate_sentence(word_count - 1, character=character)
 
 
 class ImpossibleSentenceError(Exception):

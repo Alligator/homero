@@ -4,17 +4,18 @@ from textwrap import wrap
 WIDTH = 40
 
 @hook.command
-def rip(inp, say=None):
+def ripold(inp, say=None):
   if inp == '': return
+  stripped = strip_formatting.strip(inp)
   inp = inp.strip()
   og = inp
   inp = inp.encode('utf-8')
   width = WIDTH + 4
 
-  if len(inp) > WIDTH:
+  if len(stripped) > WIDTH:
     txt = wrap(inp, WIDTH)
   else:
-    width = len(inp) + 4
+    width = len(stripped) + 4
     txt = [inp]
 
   topfiller = str.center('', width-5, '-')

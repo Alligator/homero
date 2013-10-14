@@ -1,6 +1,8 @@
 from util import hook, http
+from cgi import escape
 import time
 import random
+import json
 
 streaming = False
 last = time.time()
@@ -25,7 +27,10 @@ def stream(inp, conn=None):
       streaming = False
 
 @hook.command('stream')
-def streamcmd(inp):
+def streamcmd(inp, chan=None):
+  if inp and chan == '#sa-minecraft' and len(inp) < 50:
+    open('/var/www/stream.alligatr.co.uk/stream.json', 'w').write(json.dumps({'msg':escape(inp)}))
+    return 'stream title set: http://stream.alligatr.co.uk'
   s = check_stream()
   t = 'streaming' if random.random() > 0.1 else 'screaming'
   if s:
