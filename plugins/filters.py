@@ -1,6 +1,7 @@
 from util import hook, strip_formatting
 from random import randint, choice
 from collections import OrderedDict
+from itertools import cycle
 import string
 
 #------------------------------------------------------------------------------
@@ -55,9 +56,15 @@ def color(inp):
     return inp
 color.__doc__ = 'color name text - print text in color, available colors: ' + ' '.join(colors.keys())
 
+@hook.command('holidays')
+@hook.command('xmas')
 @hook.command
-def rot13(inp):
-  return inp.encode('rot13')
+def christmas(text, say=None):
+    c = cycle(['\x0304', '\x0309'])
+    out = ""
+    for t in text:
+        out += c.next() + t
+    say(out)
 
 @hook.command
 def rainbow(inp):
@@ -110,6 +117,10 @@ def capwords(inp):
 
 #------------------------------------------------------------------------------
 # STRANGE
+
+@hook.command
+def rot13(inp):
+  return inp.encode('rot13')
 
 @hook.command
 def bubble(inp):

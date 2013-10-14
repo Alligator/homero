@@ -5,7 +5,7 @@ import re
 
 taned = False
 
-@hook.event('*')
+@hook.event('*', limit=1)
 def tane_event(paraml, conn=None):
     global taned
     today = datetime.today()

@@ -5,7 +5,7 @@ from poster.streaminghttp import register_openers
 import urllib2
 from pprint import pprint
 
-@hook.command
+@hook.command(adminonly=True)
 def listplugins(inp, bot=None):
   plugs = defaultdict(lambda: defaultdict(list))
   count = 0
