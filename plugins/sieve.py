@@ -1,4 +1,5 @@
 import re
+import time
 
 from util import hook
 
@@ -40,3 +41,16 @@ def sieve_suite(bot, input, func, kind, args):
             return None
 
     return input
+
+@hook.sieve
+def sieve_limit(bot, input, func, kind, args):
+  if 'limit' in args:
+    if 'lastlimit' in args:
+      if args['lastlimit'] + args['limit']*60 > time.time():
+        return None
+      else:
+        args['lastlimit'] = time.time()
+    else:
+      args['lastlimit'] = time.time()
+
+  return input
