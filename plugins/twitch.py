@@ -1,7 +1,6 @@
 from util import hook, http
 from cgi import escape
 import time
-import random
 import json
 
 streaming = False
@@ -16,12 +15,10 @@ def stream(inp, conn=None):
   s = check_stream()
   if s and not streaming:
     streaming = True
-    if random.random() > 0.9:
-      conn.cmd('privmsg #sa-minecraft \x0313someone started screaming http://scream.alligatr.co.uk/')
-    else:
-      conn.cmd('privmsg #sa-minecraft \x0313someone started streaming http://stream.alligatr.co.uk/')
+    conn.cmd('privmsg #sa-minecraft \x0313someone started streaming http://stream.alligatr.co.uk/')
   elif not s and streaming:
     streaming = False
+    open('/var/www/stream.alligatr.co.uk/stream.json', 'w').write(json.dumps({'msg':''}))
 
 @hook.command('stream')
 def streamcmd(inp, chan=None):
@@ -29,8 +26,7 @@ def streamcmd(inp, chan=None):
     open('/var/www/stream.alligatr.co.uk/stream.json', 'w').write(json.dumps({'msg':escape(inp)}))
     return 'stream title set: http://stream.alligatr.co.uk'
   s = check_stream()
-  t = 'streaming' if random.random() > 0.1 else 'screaming'
   if s:
-    return '\x0313someone is '+t+' http://'+t[:6]+'.alligatr.co.uk/'
+    return '\x0313someone is '+t+' http://stream.alligatr.co.uk/'
   else:
     return 'no-one is '+t
