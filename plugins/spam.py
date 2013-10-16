@@ -49,3 +49,14 @@ def weed(inp, say=None):
   say(r'           \ .\  |.|  /. /')
   say(r' _ -_^_^_^_-  \ \\ // /  -_^_^_^_- _')
   say(r'   - -/_/_/- ^ ^  |  ^ ^ -\_\_\- -')
+
+@hook.command
+def skull(inp, say=None):
+  say(unicode('╱▔▔▔▔▔▔▔╲╱▔▔▔╲┈', 'utf-8', 'replace'))
+  say(unicode('▏╮╭┈╮┊╭┈╮▏▉┈┈▉▏', 'utf-8', 'replace'))
+  say(unicode('▏┊╱▉╲╮╱▉╲▏┈┈▍▕┈', 'utf-8', 'replace'))
+  say(unicode('▏╯╲▂╱┊╲▂╱▏╱▔▔▔╲', 'utf-8', 'replace'))
+  say(unicode('╲╭┳┳╮▕▋╭▂▏▉┈┈▉▕', 'utf-8', 'replace'))
+  say(unicode('┈▔▏┣┳┳┳┳▏▕┈▃┈┈▕', 'utf-8', 'replace'))
+  say(unicode('┈┈▏╰┻┻┻┻▏▕┳┳┳▕▔', 'utf-8', 'replace'))
+  say(unicode('┈┈╲▂▂▂▂▂▏▕▂▂▂╱┈', 'utf-8', 'replace'))
