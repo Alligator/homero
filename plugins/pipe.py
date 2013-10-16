@@ -144,10 +144,15 @@ def pipe(inp, db=None, input=None, bot=None):
     if output.empty():
       output.push(args)
 
-    for line in output:
-      res = call(bot, func, func_name, line, input)
+    if 'multiline' in func[1]:
+      res = call(bot, func, func_name, '\n'.join(output), input)
       if res:
         nxt.push(res)
+    else:
+      for line in output:
+        res = call(bot, func, func_name, line, input)
+        if res:
+          nxt.push(res)
 
     output = nxt
 
@@ -160,4 +165,4 @@ def pipe(inp, db=None, input=None, bot=None):
       else:
         say(line)
       if len(line) > 45:
-        time.sleep(1)
+        time.sleep(0.5)
