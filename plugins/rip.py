@@ -3,29 +3,33 @@ from textwrap import wrap
 
 WIDTH = 40
 
-@hook.command
+@hook.command(multiline=True)
 def ripold(inp, say=None):
   if inp == '': return
-  stripped = strip_formatting.strip(inp)
-  inp = inp.strip()
-  og = inp
-  inp = inp.encode('utf-8')
-  width = WIDTH + 4
 
-  if len(stripped) > WIDTH:
-    txt = wrap(inp, WIDTH)
+  if '\n' in inp:
+    txt = inp.split('\n')
+    width = len(max(txt, key=lambda x: len(x)))
   else:
-    width = len(stripped) + 4
-    txt = [inp]
+    stripped = strip_formatting.strip(inp)
+    inp = inp.strip()
+    og = inp
+    width = WIDTH + 4
+
+    if len(stripped) > WIDTH:
+      txt = wrap(inp, WIDTH)
+    else:
+      width = len(stripped) + 4
+      txt = [inp]
 
   topfiller = str.center('', width-5, '-')
 
   headstone = []
-  headstone.append('  _.' + topfiller + '-._\n')
-  headstone.append(' |' + str.center('RIP', width) + '|\n')
+  headstone.append('  _.' + topfiller + '-._')
+  headstone.append(' |' + str.center('RIP', width) + '|')
   for line in txt:
-    headstone.append(' |' + str.center(line.upper(), width) + '|\n')
-  headstone.append(' |' + str.center('', width, '_') + '|\n')
+    headstone.append(' |' + str.center(line.upper().encode('utf-8'), width) + '|')
+  headstone.append(' |' + str.center('', width, '_') + '|')
   headstone.append('|' + str.center('', width+2, '_') + '|')
 
   for l in headstone:
