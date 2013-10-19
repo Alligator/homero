@@ -27,6 +27,6 @@ def streamcmd(inp, chan=None):
     return 'stream title set: http://stream.alligatr.co.uk'
   s = check_stream()
   if s:
-    return '\x0313someone is '+t+' http://stream.alligatr.co.uk/'
+    return '\x0313someone is streaming http://stream.alligatr.co.uk/'
   else:
-    return 'no-one is '+t
+    return 'no-one is streaming'
