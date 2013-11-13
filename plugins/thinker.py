@@ -9,6 +9,6 @@ def think(inp, say=None):
   out = ''
   for i, line in enumerate(lines):
     if i+1 == c:
-      say(u'(  .  __ . ) . o O ( {} )'.format(line))
+      say(u'( .   __ . ) . o O ( {} )'.format(line))
     else:
       say(u'                     {}'.format(line))
