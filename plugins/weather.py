@@ -36,7 +36,6 @@ def weather(inp, bot=None, reply=None, nick=None, db=None):
     return 'Location not found'
   
   w = j['data']['current_condition'][0]
-  print w
   w['city'] = j['data']['request'][0]['query']
   w['desc'] = w['weatherDesc'][0]['value']
   print w
