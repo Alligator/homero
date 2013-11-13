@@ -98,6 +98,8 @@ def pipe(inp, db=None, input=None, bot=None):
 
   # build the cmd list from the shlex
   cmdshlex = shlex.shlex(inp)
+  cmdshlex.commenters = ''
+  cmdshlex.wordchars += '#-'
   cmdbuf = ''
   cmds = []
   for token in cmdshlex:
