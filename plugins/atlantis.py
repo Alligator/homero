@@ -3,8 +3,8 @@ from atlantipsum import atlantipsum
 
 
 @hook.command
-def gate(inp):
-    ".gate <character> <wordcount>. Characters include: McKay."
+def sg(inp):
+    ".sg <character> <wordcount>. Characters include: McKay."
     characters = ['mckay']
     if inp.lower().split(' ')[0] in characters:
         count = None
