@@ -7,13 +7,20 @@ cached_filename = ''
 
 @hook.command
 def oneyearago(inp, chan=None, say=None):
+  xyearsago(1, chan, say)
+
+@hook.command
+def twoyearsago(inp, chan=None, say=None):
+  xyearsago(2, chan, say)
+
+def xyearsago(x, chan, say):
   global cache, cached_filename
   dt = datetime.now()
   try:
-    ndt = dt.replace(year=dt.year - 1)
+    ndt = dt.replace(year=dt.year - x)
   except:
     # only happens on feb 29th i guess
-    ndt = dt.replace(year=dt.year - 1, month=3, day=1)
+    ndt = dt.replace(year=dt.year - x, month=3, day=1)
   # filename format: #sa-minecraft.09-13.log
   # chan = '#sa-minecraft'
   filename = 'persist/log/{}/irc.synirc.net/{}.{}-{}.log'.format(
@@ -21,8 +28,12 @@ def oneyearago(inp, chan=None, say=None):
   if cached_filename == filename:
     hours = cache
   else:
-    cached_filename = filename
-    f = open(filename, 'r')
+    try:
+      f = open(filename, 'r')
+      cached_filename = filename
+    except IOError, e:
+      say('no logs for this channel/user mate')
+      return
     hours = [
         (line, datetime.strptime(line[:8], '%H:%M:%S').replace(year=ndt.year, month=ndt.month, day=ndt.day))
         for line in f if not line[9:].startswith('-!-')]
