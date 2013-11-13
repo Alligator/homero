@@ -6,14 +6,14 @@ import urllib2
 @hook.command
 def puush(inp):
   url = 'http://puu.sh/{}'
-  for i in range(5):
+  for i in range(10):
     x = str(choice(range(1, 4)))
     x += choice(list(string.ascii_uppercase))
     x += ''.join([choice(string.ascii_letters) for i in range(3)])
     u = url.format(x)
     if check_puush(u):
       return u
-  return "didn't find one in 5 attempts :("
+  return "didn't find one in 10 attempts :("
   # http://puu.sh/4DQRH
 
 def check_puush(url):
