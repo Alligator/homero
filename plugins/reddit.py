@@ -4,6 +4,14 @@ from util import hook
 from util import http
 
 @hook.command
+def alligator(inp, say=None):
+  subreddit =  [
+    'britishproblems',
+  ]
+  jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
+  say('<@alligator> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
+
+@hook.command
 def city(inp):
   jsonData = http.get_json('http://www.reddit.com/r/cityporn/.json')
   j= random.choice(jsonData['data']['children'])['data']
@@ -87,6 +95,7 @@ def var(inp, say=None):
   ]
   jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/search.json?q=rumors&restrict_sr=on&sort=new')
   say('<Var> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
+
 
 @hook.command(autohelp=False)
 def movietime(inp):
