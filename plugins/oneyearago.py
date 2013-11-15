@@ -41,6 +41,6 @@ def xyearsago(x, chan, say):
     cache = hours
   line = min(hours, key=lambda x: abs(ndt - x[1]))
   idx = hours.index(line)
-  for i in range(idx-2, idx+2):
+  for i in range(idx, idx+4):
     if i >= 0 and i < len(hours):
       say(hours[i][0].decode('utf-8'))
