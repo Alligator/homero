@@ -4,7 +4,7 @@ from textwrap import wrap
 WIDTH = 40
 
 @hook.command(multiline=True)
-def ripold(inp, say=None):
+def rip(inp, say=None):
   if inp == '': return
 
   if '\n' in inp:
