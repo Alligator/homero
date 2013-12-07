@@ -15,7 +15,7 @@ def init(key, secret):
 def upworthy(inp, bot=None, say=None):
   if random.random() > 0.5:
     h = http.get_html('http://www.upworthy.com/random')
-    say(h.xpath('//*[@id="pagetitle"]/header/h1')[0].text)
+    say(h.xpath('//*[@id="nuggetContent"]/header/h1')[0].text)
     url = h.xpath('/html/head/link[6]')[0].attrib['href']
     sleep(20)
     say('that upworthy was real - ' + url)
