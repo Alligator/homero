@@ -7,7 +7,7 @@ def rle(inp):
 
 @hook.command
 def rld(inp):
-  return ''.join([x[1] * int(x[0]) for x in re.findall(r'(\d+)([A-Za-z ])', inp) if int(x[0]) < 80])
+  return ''.join([x[1] * int(x[0]) for x in re.findall(r'(\d+)(.)', inp) if int(x[0]) < 80])
 
 @hook.command
 def rlec(inp):
@@ -15,4 +15,4 @@ def rlec(inp):
 
 @hook.command
 def rldc(inp):
-  return ''.join([x[1] * (int(x[0]) - 1) for x in re.findall('\x03(\d+)([A-Za-z ])', inp) if int(x[0]) < 80])
+  return ''.join([x[1] * (int(x[0]) - 1) for x in re.findall('\x03(\d+)(.)', inp) if int(x[0]) < 80])
