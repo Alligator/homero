@@ -21,8 +21,8 @@ def stream(inp, conn=None):
     open('/var/www/stream.alligatr.co.uk/stream.json', 'w').write(json.dumps({'msg':''}))
 
 @hook.command('stream')
-def streamcmd(inp, chan=None):
-  if inp and chan == '#sa-minecraft' and len(inp) < 300:
+def streamcmd(inp, chan=None, nick=None):
+  if inp and chan == '#sa-minecraft' and len(inp) < 100:
     open('/var/www/stream.alligatr.co.uk/stream.json', 'w').write(json.dumps({'msg':escape(inp)}))
     return 'stream title set: http://stream.alligatr.co.uk'
   s = check_stream()
