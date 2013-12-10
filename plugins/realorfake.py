@@ -98,6 +98,22 @@ def round_end(real, url, say, db):
   else:
     say(', '.join(correct) + ' got it right, gj')
 
+@hook.command
+def realstats(inp, db=None, say=None, nick=None):
+  me = db.execute("select tries, wins from realorfake where nick=lower(?)", (nick,))
+  users = db.execute("select * from realorfake").fetchall()
+  if me:
+    tries, wins = me.fetchone()
+    say('you: ' + nick + ' (' + str(wins) + '/' + str(tries) + ' - ' + str(int(wins/float(tries)*100)) + '%)')
+  users.sort(key=lambda x: x[2]/x[1], reverse=True)
+  say('top 5 users who have played at least 3 times')
+  i = 0
+  for (nick, tries, wins) in users:
+    if i >= 5: break
+    if tries > 3:
+      say(str(i+1) + '. ' + nick + ' (' + str(wins) + '/' + str(tries) + ' - ' + str(int(wins/float(tries)*100)) + '%)')
+      i += 1
+
 @hook.event('PRIVMSG')
 def rof_msg(paraml, nick=None, chan=None):
   global running, current_chan
