@@ -50,6 +50,12 @@ def quote(inp, nick='', chan='', db=None):
 
     if add:
         quoted_nick, msg = add.groups()
+        m = re.match(r"\<([^>]+)\>\s*(.*)$", msg)
+        if m:
+          n, rest = m.groups()
+          if n[0] in '~&@%+ ': n = n[1:]
+          if quoted_nick == n:
+            msg = rest
         try:
             add_quote(db, chan, quoted_nick, nick, msg)
             db.commit()
