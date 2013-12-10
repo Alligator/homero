@@ -25,7 +25,7 @@ def get_tweets(key, name):
 
 
 def get_cached(name, bot):
-  global imi_cache
+  global cache
   init(bot.config['api_keys']['twitter_key'], bot.config['api_keys']['twitter_secret'])
   if name in cache and time.time() - cache[name][0] + 60 * 60 * 24 > 0:
     print name, 'in cache'
