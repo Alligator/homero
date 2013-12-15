@@ -36,9 +36,14 @@ def weather(inp, bot=None, reply=None, nick=None, db=None):
     return 'Location not found'
   
   w = j['data']['current_condition'][0]
-  w['city'] = j['data']['request'][0]['query']
   w['desc'] = w['weatherDesc'][0]['value']
-  print w
+  w['city'] = j['data']['request'][0]['query']
+
+  t = j['data']['request'][0]['type']
+  if t == 'Zipcode':
+    j = http.get_json('http://api.zippopotam.us/us/' + w['city'])['places'][0]
+    w['city'] = '{place name}, {state}'.format(**j)
+
   reply('{city}: {desc}, {temp_F}F/{temp_C}C, Humidity: {humidity}%, '\
          'Wind: {windspeedKmph}kph/{windspeedMiles}mph'.format(**w))
 
