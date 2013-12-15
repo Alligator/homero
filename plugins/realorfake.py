@@ -3,6 +3,7 @@ from util import hook, http
 from twython import Twython
 from lxml import html
 from time import sleep
+import math
 
 token = None
 
@@ -29,7 +30,7 @@ def vice(inp, bot=None, db=None, say=None, chan=None):
     init(bot.config['api_keys']['twitter_key'], bot.config['api_keys']['twitter_secret'])
     twitter = Twython(bot.config['api_keys']['twitter_key'], access_token=token)
     j = twitter.get_user_timeline(screen_name='Vice_Is_Hip', count=100)
-    tweet = random.choice(j)
+    tweet = random.choice([t for t in j if 'http://' not in t['text']])
     msg = tweet['text']
     url = 'https://twitter.com/Vice_Is_Hip/status/' + tweet['id_str']
     return msg, url
@@ -88,7 +89,7 @@ def round_end(real, url, say, db):
     tries += 1
     if guess == real:
       wins += 1
-      correct.append(nick + ' (' + str(int(wins/float(tries)*100)) + '%)')
+      correct.append(nick + ' (' + topercent(wins, tries) + ')')
     db.execute("insert or replace into realorfake(nick, tries, wins) values (?,?,?)",
                (nick.lower(), tries, wins))
 
@@ -104,15 +105,25 @@ def realstats(inp, db=None, say=None, nick=None):
   users = db.execute("select * from realorfake").fetchall()
   if me:
     tries, wins = me.fetchone()
-    say('you: ' + nick + ' (' + str(wins) + '/' + str(tries) + ' - ' + str(int(wins/float(tries)*100)) + '%)')
-  users.sort(key=lambda x: x[2]/x[1], reverse=True)
+    say('you: {} ({}/{} = {})'.format(nick, wins, tries, topercent(wins, tries)))
+
+  def confidence(nick, tries, wins):
+    s = wins/float(tries)
+    c = (math.log(tries)/10)
+    if c > 0.25: c = 0.25
+    return 1 + s + c
+
+  users.sort(key=lambda x: confidence(x[0], x[1], x[2]), reverse=True)
   say('top 5 users who have played at least 3 times')
   i = 0
   for (nick, tries, wins) in users:
     if i >= 5: break
     if tries > 3:
-      say(str(i+1) + '. ' + nick + ' (' + str(wins) + '/' + str(tries) + ' - ' + str(int(wins/float(tries)*100)) + '%)')
+      say('{}. {} ({}/{} = {})'.format((i+1), nick, wins, tries, topercent(wins, tries)))
       i += 1
+
+def topercent(wins, tries):
+  return str(int(round(wins/float(tries)*100))) + '%'
 
 @hook.event('PRIVMSG')
 def rof_msg(paraml, nick=None, chan=None):
