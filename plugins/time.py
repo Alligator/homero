@@ -4,6 +4,8 @@ from  util import hook, http
 def time_cmd(inp, reply=None, bot=None):
   if inp == 'lodon':
     inp = 'london'
+  if inp == 'my life':
+    return 'no:no'
   request = 'http://api.worldweatheronline.com/free/v1/tz.ashx?key={0}&q={1}&format=json'
   j = http.get_json(request.format(bot.config['api_keys']['wwo'], http.quote_plus(inp)))
   j = j['data']['time_zone'][0]
