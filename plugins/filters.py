@@ -45,6 +45,7 @@ def blue(inp): return color('blue ' + inp)
 @hook.command
 def pink(inp): return color('pink ' + inp)
 @hook.command
+@hook.command('purple')
 def magenta(inp): return color('magenta ' + inp)
 
 @hook.command
