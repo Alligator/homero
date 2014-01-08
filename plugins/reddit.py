@@ -9,12 +9,12 @@ def alligator(inp, say=None):
     'britishproblems',
   ]
   jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
-  say('<@alligator> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
+  say('<@alligator> ' + http.unescape(random.choice(jsonData['data']['children'])['data']['title'].lower()))
 
 @hook.command
 def city(inp):
   jsonData = http.get_json('http://www.reddit.com/r/cityporn/.json')
-  j= random.choice(jsonData['data']['children'])['data']
+  j= http.unescape(random.choice(jsonData['data']['children'])['data'])
   return j['title'] + ' ' + j['url']
 
 @hook.command
@@ -23,7 +23,7 @@ def ghost(inp, say=None):
     'dungeonsanddragons',
   ]
   jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
-  say('<Ghoster> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
+  say('<Ghoster> ' + http.unescape(random.choice(jsonData['data']['children'])['data']['title'].lower()))
 
 @hook.command
 def hurt(inp, say=None):
@@ -38,7 +38,7 @@ def hurt(inp, say=None):
     'DoesAnybodyElse',
   ]
   jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
-  say('<Hurt> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
+  say('<Hurt> ' + http.unescape(random.choice(jsonData['data']['children'])['data']['title'].lower()))
 
 @hook.command
 def danl(inp, say=None):
@@ -86,7 +86,7 @@ def hitze(inp, say=None):
     else:
       noSelf = True
 
-  say("<hitz> " + potentialURL + " " + random.choice(hitzelist))
+  say("<hitz> " + potentialURL + " " + http.unescape(random.choice(hitzelist)))
 
 @hook.command
 def var(inp, say=None):
@@ -94,19 +94,19 @@ def var(inp, say=None):
     'Games',
   ]
   jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/search.json?q=rumors&restrict_sr=on&sort=new')
-  say('<Var> ' + random.choice(jsonData['data']['children'])['data']['title'].lower())
+  say('<Var> ' + http.unescape(random.choice(jsonData['data']['children'])['data']['title'].lower()))
 
 
 @hook.command(autohelp=False)
 def movietime(inp):
   ".movietime <query> -- return a random movie from r/fullmoviesonyoutube or search if you supply a query"
   if inp:
-    jsonData = http.get_json('http://www.reddit.com/r/fullmoviesonyoutube/search.json?q={}&restrict_sr=on&sort=new&limit=1'.format(inp))
+    jsonData = http.unescape(http.get_json('http://www.reddit.com/r/fullmoviesonyoutube/search.json?q={}&restrict_sr=on&sort=new&limit=1'.format(inp)))
     try:
       movie = jsonData['data']['children'][0]['data']
     except IndexError, e:
       return 'no results'
   else:
     jsonData = http.get_json('http://www.reddit.com/r/fullmoviesonyoutube.json')
-    movie = random.choice(jsonData['data']['children'])['data']
+    movie = http.unescape(random.choice(jsonData['data']['children'])['data'])
   return movie['title'] + ' ' + movie['url']
