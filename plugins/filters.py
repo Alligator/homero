@@ -1,3 +1,4 @@
+# vim: set fileencoding=utf-8 :
 from util import hook, strip_formatting
 from random import randint, choice
 from collections import OrderedDict
