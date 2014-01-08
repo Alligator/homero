@@ -20,7 +20,7 @@ def script(inp):
 def jab(inp):
     if len(inp) == 0: return
     passchars = [2, 15, 18, 29, 31, 32]
-    if len(inp) > 96:
+    if len(inp) > 200:
         return
     out = ''
     bold = False
