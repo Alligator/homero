@@ -1,5 +1,6 @@
 # alligator
 import random
+import requests
 from util import hook, http
 
 #search_url = "https://gdata.youtube.com/feeds/api/videos?v=2&alt=jsonc&category=los%2Csimpsons&max-results=1&start-index="
@@ -11,13 +12,7 @@ def searchURL(cat):
 @hook.command(autohelp=False)
 def homero(inp):
     '.homero <query> -- los simpsons?'
-    j = http.get_json(searchURL("los simpsons"))
-    if j['data']['totalItems'] == 0:
-        return 'no results found'
-
-    title = j['data']['items'][0]['title']
-    vid = j['data']['items'][0]['id']
-    return title + ' - ' + yt_url % vid
+    return requests.get('http://simpsons-latino.tumblr.com/random').url
 
 @hook.command
 def kula(inp):
