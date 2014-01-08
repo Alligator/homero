@@ -244,3 +244,8 @@ def flip(inp):
       out += c
 
   return out
+
+@hook.command
+def smallcaps(inp):
+  t = string.maketrans(string.lowercase, 'ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ')
+  return inp.translate(t)
