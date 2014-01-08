@@ -17,7 +17,7 @@ current_chan = ''
 running = False
 
 @hook.command
-def vice(inp, bot=None, db=None, say=None, chan=None):
+def vice(inp, nick=None, bot=None, db=None, say=None, chan=None):
   def real():
     h = http.get_xml('http://www.vice.com/rss')
     item = random.choice(h.xpath('//item'))
@@ -34,9 +34,9 @@ def vice(inp, bot=None, db=None, say=None, chan=None):
     msg = tweet['text']
     url = 'https://twitter.com/Vice_Is_Hip/status/' + tweet['id_str']
     return msg, url
-  realorfake(real, fake, say, db, chan)
+  realorfake(nick, real, fake, say, db, chan)
 
-def realorfake(real, fake, say, db, chan):
+def realorfake(nick, real, fake, say, db, chan):
   global current_chan, users, running
   if running: return
   users = {}
@@ -50,11 +50,11 @@ def realorfake(real, fake, say, db, chan):
     real = False
   say(msg)
   sleep(20)
-  round_end(real, url, say, db)
+  round_end(nick, real, url, say, db)
   running = False
 
 @hook.command
-def upworthy(inp, bot=None, db=None, say=None, chan=None):
+def upworthy(inp, nick=None, bot=None, db=None, say=None, chan=None):
   def real():
     h = http.get_html('http://www.upworthy.com/random')
     msg = h.xpath('//*[@id="nuggetContent"]/header/h1')[0].text
@@ -70,14 +70,16 @@ def upworthy(inp, bot=None, db=None, say=None, chan=None):
     msg = tweet['text']
     url = 'https://twitter.com/UpWorthIt/status/' + tweet['id_str']
     return msg, url
-  realorfake(real, fake, say, db, chan)
+  realorfake(nick, real, fake, say, db, chan)
 
-def round_end(real, url, say, db):
+def round_end(caller_nick, real, url, say, db):
   global users
   if real: say('that was real ' + url)
   else   : say('that was fake ' + url)
   db.execute("create table if not exists realorfake(nick primary key, tries, wins)")
   correct = []
+  if caller_nick not in users:
+    users[caller_nick] = None
   for nick, guess in users.iteritems():
     stat = db.execute("select tries, wins from realorfake where nick=lower(?)",
                      (nick,)).fetchone()
@@ -110,7 +112,7 @@ def realstats(inp, db=None, say=None, nick=None):
   def confidence(nick, tries, wins):
     s = wins/float(tries)
     c = (math.log(tries)/10)
-    if c > 0.25: c = 0.25
+    if c > 0.35: c = 0.35
     return 1 + s + c
 
   users.sort(key=lambda x: confidence(x[0], x[1], x[2]), reverse=True)
