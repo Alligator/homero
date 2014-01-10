@@ -248,5 +248,12 @@ def flip(inp):
 
 @hook.command
 def smallcaps(inp):
-  t = string.maketrans(string.lowercase, 'ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ')
-  return inp.translate(t)
+  sml = u"\u1D00\u0299\u1D04\u1D05\u1D07\u0493\u0262\u029C\u026A\u1D0A\u1D0B\u029F\u1D0D\u0274\u1D0F\u1D18\u01EB\u0280\x73\u1D1B\u1D1C\u1D20\u1D21\x78\u028F\u1D22"
+  res = ""
+  for c in inp:
+    # c = c.lower()
+    if ord(c) >= 97 and ord(c) <= 122:
+      res += sml[ord(c) - 97]
+    else:
+      res += c
+  return res
