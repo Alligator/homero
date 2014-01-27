@@ -14,8 +14,8 @@ def alligator(inp, say=None):
 @hook.command
 def city(inp):
   jsonData = http.get_json('http://www.reddit.com/r/cityporn/.json')
-  j= http.unescape(random.choice(jsonData['data']['children'])['data'])
-  return j['title'] + ' ' + j['url']
+  j = random.choice(jsonData['data']['children'])['data']
+  return http.unescape(j['title'] + ' ' + j['url'])
 
 @hook.command
 def ghost(inp, say=None):
@@ -108,5 +108,5 @@ def movietime(inp):
       return 'no results'
   else:
     jsonData = http.get_json('http://www.reddit.com/r/fullmoviesonyoutube.json')
-    movie = http.unescape(random.choice(jsonData['data']['children'])['data'])
-  return movie['title'] + ' ' + movie['url']
+    movie = random.choice(jsonData['data']['children'])['data']
+  return http.unescape(movie['title'] + ' ' + movie['url'])
