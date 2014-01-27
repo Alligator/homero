@@ -9,7 +9,7 @@ from util import hook, http
 schedule = []
 current_game = ''
 
-@hook.event('*', limit=3)
+# @hook.event('*', limit=3)
 def get_agdq_schedule(paraml):
   global schedule, current_game
   j = http.get_json('https://api.twitch.tv/kraken/streams/speeddemosarchivesda')
@@ -28,7 +28,7 @@ def get_agdq_schedule(paraml):
     g.append([tm, game])
   schedule = g
 
-@hook.command
+# @hook.command
 def agdq(inp):
   global schedule, current_game
   curr = None
