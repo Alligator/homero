@@ -28,8 +28,10 @@ def iflog(inp):
 
 @hook.command(adminonly=True)
 def ifsave(inp, conn=None):
+  print 
   ip = os.open('/home/alligator/if/inp', os.O_WRONLY)
   os.write(ip, 'save\nhomero\n')
+  os.write(ip, 'y\n')
   ifsend('', conn=conn)
 
 @hook.command(adminonly=True)
@@ -51,7 +53,7 @@ def ifsend(inp, conn=None):
     else:
       pos = 0
 
-  if inp and not any(n in inp for n in ignore):
+  if not any(n in inp for n in ignore):
     ip = os.open('/home/alligator/if/inp', os.O_WRONLY)
     os.write(ip, inp + '\n')
   time.sleep(0.5)
@@ -59,6 +61,7 @@ def ifsend(inp, conn=None):
   lines = op.read().split('\n')
   pos = op.tell()
   for line in lines:
+    line = line.strip()
     if line:
       match = status_re.match(line)
       if match:
