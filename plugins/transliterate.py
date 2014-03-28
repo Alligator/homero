@@ -70,10 +70,11 @@ def russify(inp):
       (u'x',u'кс'),
       (u'q',u'кв'),
       (u'x',u'кс'),
+      (u'ph',u'ф'),
     ],
     'single': [
       u'abcdefghijklmnopqrstuvwxyz',
-      u'абкдэфгхижклмноп рстувб ыз',
+      u'абкдэфгхижклмноп рстувв ыз',
     ]
   }
   return transliterate(table, inp.lower())

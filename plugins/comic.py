@@ -54,9 +54,6 @@ def comic(paraml, input=None, db=None, bot=None, conn=None):
 
     panels.append(panel)
 
-    print repr(chars)
-    print repr(panels)
-
     # fname = ''.join([random.choice("fartpoo42069") for i in range(16)]) + ".jpg"
     fname = datetime.now().isoformat().split('.')[0] + '-' + input.chan.replace('#', '') + '.jpg'
 
@@ -98,6 +95,7 @@ def wrap(st, font, draw, width):
 def rendertext(st, font, draw, pos):
     ch = pos[1]
     for s in st:
+        s = s.encode('utf-8')
         w, h = draw.textsize(s, font=font)
         for i in range(1,2):
           draw.text((pos[0]-i, ch-i), s, font=font, fill=(0x0,0x0,0x0,0x0))
@@ -134,7 +132,6 @@ def make_comic(chars, panels):
     chars = zip(chars, filenames)
     charmap = dict()
     for ch, f in chars:
-        print f
         charmap[ch] = Image.open(f)
 
 

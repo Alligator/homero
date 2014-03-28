@@ -1,4 +1,5 @@
 from util import hook, http
+import requests
 from cgi import escape
 import time
 import json
@@ -18,15 +19,28 @@ def stream(inp, conn=None):
     conn.cmd('privmsg #sa-minecraft \x0313someone started streaming http://stream.alligatr.co.uk/')
   elif not s and streaming:
     streaming = False
-    open('/var/www/stream.alligatr.co.uk/stream.json', 'w').write(json.dumps({'msg':''}))
 
-@hook.command('stream')
-def streamcmd(inp, chan=None, nick=None):
-  if inp and chan == '#sa-minecraft' and len(inp) < 100:
-    open('/var/www/stream.alligatr.co.uk/stream.json', 'w').write(json.dumps({'msg':escape(inp)}))
-    return 'stream title set: http://stream.alligatr.co.uk'
-  s = check_stream()
-  if s:
-    return '\x0313someone is streaming http://stream.alligatr.co.uk/'
+def channelupdate(params, bot):
+  params['oauth_token'] = bot.config['api_keys']['twitch']
+  url = 'https://api.twitch.tv/kraken/channels/breadcrew'
+  resp = requests.put(url, data=params)
+  if resp.status_code == 200:
+    return 'channel info updated'
   else:
-    return 'no-one is streaming'
+    return 'uh oh something went wrong ' + str(resp.status_code)
+
+@hook.command(limit=5)
+@hook.command('strgame')
+def setgame(inp, chan=None, bot=None):
+  if chan != '#sa-minecraft':
+    return
+  params = { 'channel[game]': inp }
+  return channelupdate(params, bot)
+
+@hook.command(limit=5)
+@hook.command('strtitle')
+def settitle(inp, chan=None, bot=None):
+  if chan != '#sa-minecraft':
+    return
+  params = { 'channel[status]': inp }
+  return channelupdate(params, bot)

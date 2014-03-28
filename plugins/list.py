@@ -23,16 +23,16 @@ def listplugins(inp, bot=None):
     out += k + '\n'
 
     if 'commands' in p:
+      out += '  plugins\n'
       for cmd in sorted(p['commands'], key=lambda x: x[0]):
-        out += '  ' + cmd[0]
-        out += ' -> ' + cmd[1] + '\n' if cmd[1] is not None else '\n'
+        out += '    ' + cmd[0]
+        out += ' - ' + cmd[1] + '\n' if cmd[1] is not None else '\n'
 
     if 'events' in p:
-      if 'commands' in p:
-        out += '\n'
+      out += '  events\n'
       for evt in sorted(p['events'], key=lambda x: x[0]):
-        out += '  ' + evt[0]
-        out += ' (event) -> ' + ', '.join(evt[1]) + '\n'
+        out += '    ' + evt[0]
+        out += ' - event responding to ' + ', '.join(evt[1]) + '\n'
 
     out += '\n'
 

@@ -20,10 +20,10 @@ def city(inp):
 @hook.command
 def ghost(inp, say=None):
   subreddit = [
-    'dungeonsanddragons',
+    'fatpeoplestories',
   ]
   jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
-  say('<Ghoster> ' + http.unescape(random.choice(jsonData['data']['children'])['data']['title'].lower()))
+  say('<Ghosters> ' + http.unescape(random.choice(jsonData['data']['children'])['data']['title'].lower()))
 
 @hook.command
 def hurt(inp, say=None):

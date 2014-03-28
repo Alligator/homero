@@ -3,7 +3,7 @@ import requests
 import lxml.html
 
 def get(inp):
-  inp = inp.encode('utf-8')
+  inp = inp.encode('utf-8').strip()
   params = {'teng': inp}
   resp = requests.post('http://japanesetransliteration.com/', data=params)
   h = lxml.html.fromstring(resp.text)
@@ -15,15 +15,18 @@ def get(inp):
 
 @hook.command
 def jap(inp):
+  ".jap text -- transliterate text to katakana and back to english"
   n = get(inp)
   return n[0]
 
 @hook.command
 def katakana(inp):
+  ".jap text -- transliterate text to katakana"
   n = get(inp)
   return n[1] + ' '+ n[0]
 
 @hook.command
 def hiragana(inp):
+  ".jap text -- transliterate text to hiragana"
   n = get(inp)
   return n[2] + ' '+ n[0]
