@@ -20,6 +20,6 @@ def twitter_status(match, bot=None):
 
   at_name = result['user']['screen_name']
   full_name = result['user']['name']
-  tweet_text = result['text'].replace('\n', ' ')
+  tweet_text = http.unescape(result['text'].replace('\n', ' '))
 
   return "\x02@" + at_name + " \x02(" + full_name + ") - " + tweet_text
