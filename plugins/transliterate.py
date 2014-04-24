@@ -57,7 +57,8 @@ def greekify(inp):
 def russify(inp):
   table = {
     'multi': [
-      (u'ye',u'е'), (u'ye',u'е'),
+      (u'the', u'зе'),
+      (u'ye',u'е'),
       (u'yo',u'ё'),
       (u'yu',u'ю'),
       (u'ya',u'я'),
@@ -71,10 +72,16 @@ def russify(inp):
       (u'q',u'кв'),
       (u'x',u'кс'),
       (u'ph',u'ф'),
+      (u'oo',u'у'),
+      (u'ce([^\w])', u'с\g<1>'),
+      (u'ck([^\w])', u'к\g<1>'),
+      (u'ff([^\w])', u'ф\g<1>'),
+      (u'ly([^\w])', u'ли\g<1>'),
+      (u'([^\w])sc', u'\g<1>с'),
     ],
     'single': [
       u'abcdefghijklmnopqrstuvwxyz',
-      u'абкдэфгхижклмноп рстувв ыз',
+      u'абкдэфгхижклмноп рстувв из',
     ]
   }
   return transliterate(table, inp.lower())
