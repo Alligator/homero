@@ -29,18 +29,12 @@ def channelupdate(params, bot):
   else:
     return 'uh oh something went wrong ' + str(resp.status_code)
 
-@hook.command(limit=5)
-@hook.command('strgame')
+@hook.command(limit=5, channel='#sa-minecraft')
 def setgame(inp, chan=None, bot=None):
-  if chan != '#sa-minecraft':
-    return
   params = { 'channel[game]': inp }
   return channelupdate(params, bot)
 
-@hook.command(limit=5)
-@hook.command('strtitle')
+@hook.command(limit=5, channel='#sa-minecraft')
 def settitle(inp, chan=None, bot=None):
-  if chan != '#sa-minecraft':
-    return
   params = { 'channel[status]': inp }
   return channelupdate(params, bot)

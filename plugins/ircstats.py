@@ -66,15 +66,13 @@ class IRCStats(object):
 
 stats = IRCStats('/var/www/stats.json')
 
-@hook.event('PRIVMSG')
+@hook.event('PRIVMSG', channel='#sa-minecraft')
 def irc_msg(paraml, input=None, nick=None, chan=None):
-  if chan != '#sa-minecraft':
-    return
   d = datetime.now().utctimetuple()
   hour = d.tm_hour
   day = d.tm_wday
   stats.new_line(nick, hour, day)
 
-@hook.event('NICK')
+@hook.event('NICK', channel='#sa-minecraft')
 def irc_nickchange(paraml, input=None, nick=None, chan=None):
   stats.nick_change(nick, paraml[0])
