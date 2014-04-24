@@ -1,29 +1,34 @@
 import simplejson as json
 import random
+import time
 from util import hook
 from util import http
 
+queue = {}
+
+def reddit_get(subreddit):
+  if subreddit not in queue or len(queue[subreddit]['posts']) == 0 or time.time() - queue[subreddit]['time'] > 400:
+    jsonData = http.get_json('http://www.reddit.com/r/' + subreddit + '/.json')
+    queue[subreddit] = {
+        'posts': [http.unescape(d['data']['title'].lower()) for d in jsonData['data']['children']],
+        'time': time.time()
+    }
+  p = queue[subreddit]['posts']
+  c = random.choice(p)
+  p.remove(c)
+  return c
+
 @hook.command
 def alligator(inp, say=None):
-  subreddit =  [
-    'britishproblems',
-  ]
-  jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
-  say('<@alligator> ' + http.unescape(random.choice(jsonData['data']['children'])['data']['title'].lower()))
+  say('<@alligator> ' + reddit_get('britishproblems'))
 
 @hook.command
 def city(inp):
-  jsonData = http.get_json('http://www.reddit.com/r/cityporn/.json')
-  j = random.choice(jsonData['data']['children'])['data']
-  return http.unescape(j['title'] + ' ' + j['url'])
+  return reddit_get('cityporn')
 
 @hook.command
 def ghost(inp, say=None):
-  subreddit = [
-    'fatpeoplestories',
-  ]
-  jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
-  say('<Ghosters> ' + http.unescape(random.choice(jsonData['data']['children'])['data']['title'].lower()))
+  say('<Ghosters> ' + reddit_get('fatpeoplestories'))
 
 @hook.command
 def hurt(inp, say=None):
@@ -37,8 +42,7 @@ def hurt(inp, say=None):
     'hardbodies',
     'DoesAnybodyElse',
   ]
-  jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
-  say('<Hurt> ' + http.unescape(random.choice(jsonData['data']['children'])['data']['title'].lower()))
+  say('<Hurt> ' + reddit_get(random.choice(subreddit)))
 
 @hook.command
 def danl(inp, say=None):
@@ -49,8 +53,7 @@ def danl(inp, say=None):
     'BikePorn',
     'electronic_cigarette',
   ]
-  jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/.json')
-  say('<danl> ' + http.unescape(random.choice(jsonData['data']['children'])['data']['title'].lower()))
+  say('<danl> ' + reddit_get(random.choice(subreddit))
 
 @hook.command
 def hitze(inp, say=None):
@@ -93,8 +96,7 @@ def var(inp, say=None):
   subreddit =  [
     'Games',
   ]
-  jsonData = http.get_json('http://www.reddit.com/r/' + random.choice(subreddit) + '/search.json?q=rumors&restrict_sr=on&sort=new')
-  say('<Var> ' + http.unescape(random.choice(jsonData['data']['children'])['data']['title'].lower()))
+  say('<Var> ' + reddit_get(random.choice(subreddit)))
 
 
 @hook.command(autohelp=False)
