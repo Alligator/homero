@@ -54,3 +54,10 @@ def sieve_limit(bot, input, func, kind, args):
       args['lastlimit'] = time.time()
 
   return input
+
+@hook.sieve
+def sieve_chan(bot, input, func, kind, args):
+  if 'channel' in args:
+    if args['channel'] != input.chan:
+      return None
+  return input
