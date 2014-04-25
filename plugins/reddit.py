@@ -53,7 +53,7 @@ def danl(inp, say=None):
     'BikePorn',
     'electronic_cigarette',
   ]
-  say('<danl> ' + reddit_get(random.choice(subreddit))
+  say('<danl> ' + reddit_get(random.choice(subreddit)))
 
 @hook.command
 def hitze(inp, say=None):
