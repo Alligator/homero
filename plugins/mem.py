@@ -5,7 +5,7 @@ import gc
 import cPickle
 import sys
 import pdb
-from collections import defaultdict
+from collections import defaultdict, deque
 
 import objgraph
 from util import hook
@@ -19,6 +19,8 @@ def mem(inp):
         status_file = open("/proc/%d/status" % os.getpid()).read()
         line_pairs = re.findall(r"^(\w+):\s*(.*)\s*$", status_file, re.M)
         status = dict(line_pairs)
+        if inp == 'data':
+          return status['VmData'].split()[0]
         keys = 'VmSize VmLib VmData VmExe VmRSS VmStk'.split()
         return ', '.join(key + ':' + status[key] for key in keys)
 
@@ -36,25 +38,34 @@ def mem(inp):
 
 # @hook.command(adminonly=True)
 since = defaultdict(int)
-@hook.event('*', limit=2)
-def profile(inp, say=None, bot=None):
+def profile():
   global since
-  print
-  print '{:-^79}'.format(' memory usage ')
-  print mem('')
+  output = '{:-^79}'.format(' memory usage ')
+  output += mem('')
   objgraph.show_growth()
-  print
-  print '{:-^79}'.format(' last called ')
+  output += '{:-^79}'.format(' last called ')
   for name, c in since.iteritems():
-    print '{}: {}'.format(c, name)
-  print '{:-^79}'.format('')
+    output += '{}: {}'.format(c, name)
+  output += '{:-^79}'.format('')
   since = defaultdict(int)
+  return output
   # print hpy().heap()[0].byvia
   # print sorted(objgraph.typestats(objgraph.get_leaking_objects()).iteritems(), key=lambda x: x[1])
   # objgraph.show_refs([x[0] for x in bot.plugs['event'] if x[1]['name'] == 'irc_msg'][0], filename='/var/www/homeromem.png', max_depth=5, refcounts=True)
 
+prev = 0
+calls = deque(maxlen=10)
 @hook.sieve
 def sieve_mem(bot, input, func, kind, args):
-  global since
-  since[args['name']] += 1
+  global  prev, calls
+  calls.append(args['name'])
+
+  with open('memlog', 'a+') as f:
+    data = int(mem('data'))
+    if data > prev:
+      f.write('\nmemory increase {} -> {} last calls:'.format(prev, data))
+      for name in calls:
+        f.write('\n  {}'.format(name))
+      prev = data
+
   return input
