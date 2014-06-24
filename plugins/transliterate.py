@@ -141,6 +141,55 @@ def bopomofo(inp):
   }
   return transliterate(table, inp.lower())
 
+@hook.command
+def wadegiles(inp):
+  table = {
+    'multi': {
+      u'z':  u'ts',
+      u'c':  u"ts'",
+      u'j':  u'ch',
+      u'k':  u"k'",
+      u'x':  u'hs',
+      u't':  u"t'",
+      u'p':  u"p'",
+      u'q':  u"ch'",
+      u'ie': u'ieh',
+      u'ch':  u"ch'",
+      u'qu':  u"ch'ü",
+      u'ju':  u'chü',
+      u'xu':  u'hsü',
+      u'yu':  u'yü',
+      u'uo':  u'o',
+      u'üe':  u'üeh',
+      u'er':  u'erh',
+      u'ge':  u'ko',
+      u'he':  u'ho',
+      u'ke':  u"k'o",
+      u'zh':  u'ch',
+      u'ri':  u'jih',
+      u'zi':  u'tsû',
+      u'ci':  u"ts'û",
+      u'si':  u'ssû',
+      u'yi':  u'i',
+      u'ian': u'ien',
+      u'ing': u'ing',
+      u'ong': u'ung',
+      u'ang': u'ang',
+      u'eng': u'êng',
+      u'zhi':  u'chih',
+      u'chi':  u"ch'ih",
+      u'shi':  u'shih',
+      u'yin':  u'yin',
+      u'you':  u'yu',
+      u'ying':  u'ying',
+    },
+    'single': [
+      u'abdeêfghilmnorsuüvwy',
+      u'apteêfkhilmnojsuüüwy'
+    ]
+  }
+  return transliterate(table, inp.lower())
+
 def transliterate(key, inp):
   inp = unicode(inp + '\n')
   # multi-letter replacements
