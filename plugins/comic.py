@@ -1,12 +1,22 @@
 from util import hook
+
 import os
-from random import shuffle
 import random
-from PIL import Image, ImageDraw, ImageFont
+import cStringIO
+import base64
+import json
+from random import shuffle
 from datetime import datetime
 
+import requests
+from PIL import Image, ImageDraw, ImageFont
+
 mcache = {}
+ccache = {}
 savepath = '/var/www/homero'
+
+panelheight = 300
+panelwidth = 450
 
 @hook.event('PRIVMSG')
 def comic_msg(paraml, input=None, bot=None):
@@ -23,6 +33,62 @@ def comic_msg(paraml, input=None, bot=None):
       bot.config['buffer_size'] = 30
 
     mcache[key] = mcache[key][-1*bot.config['buffer_size']:]
+
+@hook.command
+def lastcomic(inp, bot=None, chan=None):
+  ".lastcomic [split] [panel1,panel2,panel3...] - crop the last comic to selected panels. if no panels are given it just uploads the comic to imgur. split splits it into 3 panel high images"
+  # ok lets do this
+  # dont be a dumb and try this with no comic
+  if chan in ccache:
+    img = Image.open(ccache[chan])
+    split = inp.startswith('split')
+    # strip split from the input
+    if split:
+      inp = inp[6:]
+    if inp:
+      # crop the panels and paste them into a new image, ez
+      panels = map(int, inp.split(','))
+      new = Image.new("RGBA", (panelwidth, panelheight * len(panels)), (0xff, 0xff, 0xff, 0xff))
+      for i, panel in enumerate(panels):
+        p = img.crop((0, (panel-1) * panelheight, panelwidth, panel * panelheight))
+        new.paste(p, (0, i * panelheight))
+      img = new
+
+    def post(img):
+      auth = ('enemy.forest.brigade@gmail.com', bot.config['api_keys']['foauth'])
+      o = cStringIO.StringIO()
+      img.save(o, 'png')
+      data = {'image': base64.b64encode(o.getvalue())}
+      resp = requests.post('https://foauth.org/api.imgur.com/3/upload', data=data, auth=auth)
+      try:
+        j = json.loads(resp.text)
+        return j['data']['link']
+      except Exception, e:
+        print e
+
+    if split:
+      height = img.size[1]
+      height3 = panelheight*3
+      if height < height3:
+        # dont be dumb
+        return post(img)
+      else:
+        out = ''
+        for y in range(0, height, height3):
+          if (y + height3) < height:
+            # 3 panels remaining
+            remaining = height3
+          else:
+            # < 3 panels remaining
+            remaining = panelheight * ((height - y)/panelheight)
+          new = Image.new("RGBA", (panelwidth, remaining))
+          new.paste(img.crop((0, y, panelwidth, y + remaining)), (0, 0))
+          out += post(new) + ' '
+        return out
+    else:
+      return post(img)
+  else:
+    return 'no last comic'
 
 @hook.command("comic")
 def comic(paraml, input=None, db=None, bot=None, conn=None):
@@ -59,6 +125,7 @@ def comic(paraml, input=None, db=None, bot=None, conn=None):
       make_comic(chars, panels, title).save(os.path.join(savepath, fname), quality=86)
     else:
       make_comic(chars, panels).save(os.path.join(savepath, fname), quality=86)
+    ccache[input.chan] = os.path.join(savepath, fname)
     return "http://irc.alligatr.co.uk/homero/" + fname
 
 def wrap(st, font, draw, width):
@@ -98,6 +165,7 @@ def rendertext(st, font, draw, pos):
     for s in st:
         s = unicode(s)
         w, h = draw.textsize(s, font=font)
+        h = int(h)
         for i in range(1,2):
           draw.text((pos[0]-i, ch-i), s, font=font, fill=(0x0,0x0,0x0,0x0))
           draw.text((pos[0]-i, ch+i), s, font=font, fill=(0x0,0x0,0x0,0x0))
@@ -112,6 +180,7 @@ def rendertitle(st, font, draw, pos):
     for s in st:
         s = unicode(s)
         w, h = draw.textsize(s, font=font)
+        h = int(h)
         x = (450 - w)/2
         for i in range(1,2):
           draw.text((x-i, ch-i), s, font=font, fill=(0x0,0x0,0x0,0x0))
@@ -137,9 +206,6 @@ def fitimg(img, (width, height)):
 
 def make_comic(chars, panels, title=False):
     #filenames = os.listdir(os.path.join(os.getcwd(), 'chars'))
-
-    panelheight = 300
-    panelwidth = 450
 
     filenames = os.listdir('comic/chars/')
     shuffle(filenames)
