@@ -5,12 +5,22 @@ import re
 cache = []
 cached_filename = ''
 
+@hook.command('1')
 @hook.command
 def oneyearago(inp, chan=None, say=None):
   xyearsago(1, chan, say)
 
+@hook.command('2')
 @hook.command
 def twoyearsago(inp, chan=None, say=None):
+  xyearsago(2, chan, say)
+
+@hook.command('12')
+@hook.command
+def onetwo(inp, chan=None, say=None):
+  say('--- one year ago ---')
+  xyearsago(1, chan, say)
+  say('--- two years ago ---')
   xyearsago(2, chan, say)
 
 def xyearsago(x, chan, say):
