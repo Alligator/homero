@@ -46,8 +46,5 @@ def ca(inp, bot=None):
   img.save(o, 'png')
   data = {'image': base64.b64encode(o.getvalue())}
   resp = requests.post('https://foauth.org/api.imgur.com/3/upload', data=data, auth=auth)
-  try:
-    j = simplejson.loads(resp.text)
-    return 'rule {}: {}'.format(rule, j['data']['link'])
-  except Exception, e:
-    print e
+  j = simplejson.loads(resp.text)
+  return 'rule {}: {}'.format(rule, j['data']['link'])
