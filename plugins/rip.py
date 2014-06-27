@@ -10,6 +10,11 @@ def rip(inp, say=None):
   if '\n' in inp:
     txt = inp.split('\n')
     width = len(max(txt, key=lambda x: len(x)))
+  elif '\\n' in inp:
+    txt = strip_formatting.strip(inp).split('\\n')
+    width = len(max(txt, key=lambda x: len(x))) + 4
+    if len(txt) > 10:
+      return 'too long mate'
   else:
     stripped = strip_formatting.strip(inp)
     inp = inp.strip()
