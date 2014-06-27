@@ -61,3 +61,11 @@ def sieve_chan(bot, input, func, kind, args):
     if args['channel'] != input.chan:
       return None
   return input
+
+@hook.sieve
+def sieve_speedruns(bot, input, func, kind, args):
+  if input.chan == '#speedruns':
+    if func.func_name == 'sgdq':
+      return input
+  else:
+    return input
