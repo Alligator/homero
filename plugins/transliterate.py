@@ -141,7 +141,7 @@ def bopomofo(inp):
   }
   return transliterate(table, inp.lower())
 
-@hook.command
+# @hook.command
 def wadegiles(inp):
   table = {
     'multi': {
