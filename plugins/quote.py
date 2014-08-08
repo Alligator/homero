@@ -4,6 +4,7 @@ import time
 
 from util import hook
 
+sr = random.SystemRandom()
 
 def add_quote(db, chan, nick, add_nick, msg):
     db.execute('''insert or fail into quote (chan, nick, add_nick,
@@ -96,7 +97,7 @@ def quote(inp, nick='', chan='', db=None):
         else:
             selected_quote = quotes[num - 1]
     else:
-        num = random.randint(1, n_quotes)
+        num = sr.randint(1, n_quotes)
         selected_quote = quotes[num - 1]
 
     return format_quote(selected_quote, num, n_quotes)
