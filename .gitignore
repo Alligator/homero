@@ -11,3 +11,4 @@ pep8.py
 web
 *.ignore.py
 hyle.txt
+*.pyo
