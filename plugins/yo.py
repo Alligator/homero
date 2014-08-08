@@ -9,7 +9,11 @@ def yo(inp, chan=None, bot=None):
   if chan != '#sa-minecraft':
     return
   params = { 'api_token': bot.config['api_keys']['yo'] }
-  url = "http://api.justyo.co/yoall/"
+  if inp == '':
+    url = "http://api.justyo.co/yoall/"
+  else:
+    url = "http://api.justyo.co/yo/"
+    params['username'] = inp
   resp = requests.post(url, data=params)
   if resp.status_code != 201:
     return 'uh oh something went wrong (api returned {})'.format(resp.status_code)
