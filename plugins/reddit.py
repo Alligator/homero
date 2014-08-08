@@ -103,7 +103,7 @@ def var(inp, say=None):
 def movietime(inp):
   ".movietime <query> -- return a random movie from r/fullmoviesonyoutube or search if you supply a query"
   if inp:
-    jsonData = http.unescape(http.get_json('http://www.reddit.com/r/fullmoviesonyoutube/search.json?q={}&restrict_sr=on&sort=new&limit=1'.format(inp)))
+    jsonData = http.get_json('http://www.reddit.com/r/fullmoviesonyoutube/search.json?q={}&restrict_sr=on&sort=new&limit=1'.format(inp))
     try:
       movie = jsonData['data']['children'][0]['data']
     except IndexError, e:
