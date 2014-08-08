@@ -97,6 +97,7 @@ def reload_plugs(init=False):
                 code = compile(open(filename, 'U').read(), filename, 'exec')
                 namespace = {}
                 eval(code, namespace)
+                del code
             except Exception:
                 traceback.print_exc()
                 continue
