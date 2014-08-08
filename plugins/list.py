@@ -38,7 +38,5 @@ def listplugins(inp, bot=None):
 
   out +='\n total: ' + str(count)
 
-  register_openers()
-  datagen, headers = multipart_encode({'sprunge': out})
-  request = urllib2.Request('http://sprunge.us', datagen, headers)
-  return urllib2.urlopen(request).read()
+  open('/var/www/homero/paste/pluginlist', 'w').write(out)
+  return 'http://irc.alligatr.co.uk/homero/paste/pluginlist'
