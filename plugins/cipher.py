@@ -3,6 +3,8 @@ import string
 import random
 from datetime import datetime, date
 
+ciphers = []
+
 def rotate(seed):
   random.seed(seed)
   alph = string.digits + string.letters + string.punctuation + ' '
@@ -24,7 +26,9 @@ def cipher(inp):
   a, b = rotate(d)
   print a
   print ''.join(b)
-  return sub(a, b, msg)
+  msg = sub(a, b, msg)
+  ciphers.append((d, msg))
+  return msg
 
 @hook.command
 def decipher(inp):
@@ -34,3 +38,8 @@ def decipher(inp):
   print a
   print ''.join(b)
   return sub(b, a, inp)
+
+@hook.command
+def cipherlist(inp, say=None):
+  for cipher in ciphers:
+    say(cipher[0] + ' ' + cipher[1])
