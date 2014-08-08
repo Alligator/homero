@@ -3,6 +3,7 @@ from util import hook, strip_formatting
 from random import randint, choice
 from collections import OrderedDict
 from itertools import cycle
+import math
 import string
 
 #------------------------------------------------------------------------------
@@ -144,9 +145,9 @@ def ruin(inp):
   out = u''
   l = len(inp)
   for ind, c in enumerate(inp):
-    out += c
+    out += unicode(c)
     if randint(0, l) < ind + 1:
-      for i in range(ind/4):
+      for i in range(randint(0, math.sin(math.pi/l))):
         out += unichr(randint(*choice(sets)))
   return out
 
