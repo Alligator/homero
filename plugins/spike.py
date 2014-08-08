@@ -5,7 +5,7 @@ import re
 def spike(inp, say=None):
   say('spike sent')
 
-# @hook.regex('anime', re.IGNORECASE)
+@hook.regex('anime', re.IGNORECASE)
 def anime(inp, channel=None):
   return 'I think you mean animé.'
 
