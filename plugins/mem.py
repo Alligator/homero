@@ -8,6 +8,7 @@ import pdb
 from collections import defaultdict, deque
 
 import objgraph
+
 from util import hook
 from guppy import hpy
 
@@ -49,9 +50,14 @@ def profile():
   output += '{:-^79}'.format('')
   since = defaultdict(int)
   return output
+
+def obj(inp ,bot=None):
   # print hpy().heap()[0].byvia
-  # print sorted(objgraph.typestats(objgraph.get_leaking_objects()).iteritems(), key=lambda x: x[1])
-  # objgraph.show_refs([x[0] for x in bot.plugs['event'] if x[1]['name'] == 'irc_msg'][0], filename='/var/www/homeromem.png', max_depth=5, refcounts=True)
+  o = str(hpy().heap().bytype)
+  o += str(hpy().heap().bytype[0].byvia)
+  objgraph.show_refs(bot, filename='/var/www/homeromem2.png', max_depth=8, refcounts=True)
+  return o
+
 
 prev = 0
 calls = deque(maxlen=10)
@@ -67,5 +73,6 @@ def sieve_mem(bot, input, func, kind, args):
       for name in calls:
         f.write('\n  {}'.format(name))
       prev = data
+      f.write('\n' + obj('', bot))
 
   return input
