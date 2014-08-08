@@ -30,3 +30,17 @@ def dub(inp):
     vid = re.match(yre, ar[0]).group(1)
     audio = re.match(yre, ar[1]).group(1)
     return dub_url % (vid, audio)
+
+@hook.command
+def worldstar(inp):
+  sp = inp.split(' ')
+  if len(sp) > 1:
+    vid = re.match(yre, sp[0]).group(1)
+    try:
+      time = int(sp[1])
+    except ValueError:
+      return 'that is not a time'
+  else:
+    vid = re.match(yre, inp).group(1)
+    time = 0
+  return 'http://www.youdubber.com/index.php?video={}&video_start={}&audio=uEgtNSBa4Zk&audio_start=0'.format(vid, time)
