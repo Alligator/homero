@@ -4,71 +4,80 @@ import time
 
 from util import hook
 
-sr = random.SystemRandom()
 
 def add_quote(db, chan, nick, add_nick, msg):
     db.execute('''insert or fail into quote (chan, nick, add_nick,
                     msg, time) values(?,?,?,?,?)''',
-                    (chan, nick, add_nick, msg, time.time()))
+               (chan, nick, add_nick, msg, time.time()))
     db.commit()
 
 
-def del_quote(db, chan, nick, add_nick, msg):
-    db.execute('''update quote set deleted = 1 where
-                  chan=? and lower(nick)=lower(?) and msg=msg''')
+def del_quote(db, chan, nick, msg):
+    updated = db.execute('''update quote set deleted = 1 where
+                  chan=? and lower(nick)=lower(?) and msg=?''',
+                  (chan, nick, msg))
     db.commit()
+
+    if updated.rowcount == 0:
+        return False
+    else:
+        return True
+
 
 def get_quotes_by_nick(db, chan, nick):
     return db.execute("select time, nick, msg from quote where deleted!=1 "
-            "and chan=? and lower(nick)=lower(?) order by time",
-            (chan, nick)).fetchall()
+                      "and chan=? and lower(nick)=lower(?) order by time",
+                      (chan, nick)).fetchall()
 
 
 def get_quotes_by_chan(db, chan):
     return db.execute("select time, nick, msg from quote where deleted!=1 "
-           "and chan=? order by time", (chan,)).fetchall()
+                      "and chan=? order by time", (chan,)).fetchall()
 
 
 def format_quote(q, num, n_quotes):
     ctime, nick, msg = q
     return "[%d/%d] %s <%s> %s" % (num, n_quotes,
-        time.strftime("%Y-%m-%d", time.gmtime(ctime)), nick, msg)
+                                   time.strftime("%Y-%m-%d", time.gmtime(ctime)), nick, msg)
+
 
 @hook.command('q')
 @hook.command
-def quote(inp, nick='', chan='', db=None):
-    ".q/.quote [#chan] [nick] [#n]/.quote add <nick> <msg> -- gets " \
-        "random or [#n]th quote by <nick> or from <#chan>/adds quote"
+def quote(inp, nick='', chan='', db=None, admin=False):
+    ".q/.quote [#chan] [nick] [#n]/.quote add|delete <nick> <msg> -- gets " \
+        "random or [#n]th quote by <nick> or from <#chan>/adds or deletes " \
+        "quote"
 
     db.execute("create table if not exists quote"
-        "(chan, nick, add_nick, msg, time real, deleted default 0, "
-        "primary key (chan, nick, msg))")
+               "(chan, nick, add_nick, msg, time real, deleted default 0, "
+               "primary key (chan, nick, msg))")
     db.commit()
 
     add = re.match(r"add[^\w@]+(\S+?)>?\s+(.*)", inp, re.I)
+    delete = re.match(r"delete[^\w@]+(\S+?)>?\s+(.*)", inp, re.I)
     retrieve = re.match(r"(\S+)(?:\s+#?(-?\d+))?$", inp)
     retrieve_chan = re.match(r"(#\S+)\s+(\S+)(?:\s+#?(-?\d+))?$", inp)
 
     if add:
         quoted_nick, msg = add.groups()
-        m = re.match(r"\<([^>]+)\>\s*(.*)$", msg)
-        if m:
-          n, rest = m.groups()
-          if n[0] in '~&@%+ ': n = n[1:]
-          if quoted_nick == n:
-            msg = rest
         try:
             add_quote(db, chan, quoted_nick, nick, msg)
             db.commit()
         except db.IntegrityError:
             return "message already stored, doing nothing."
         return "quote added."
+    if delete:
+        if not admin:
+            return 'only admins can delete quotes'
+        quoted_nick, msg = delete.groups()
+        if del_quote(db, chan, quoted_nick, msg):
+            return "deleted quote '%s'" % msg
+        else:
+            return "found no matching quotes to delete"
     elif retrieve:
         select, num = retrieve.groups()
 
-        by_chan = False
         if select.startswith('#'):
-            by_chan = True
             quotes = get_quotes_by_chan(db, select)
         else:
             quotes = get_quotes_by_nick(db, chan, select)
@@ -90,59 +99,14 @@ def quote(inp, nick='', chan='', db=None):
     if num:
         if num > n_quotes or (num < 0 and num < -n_quotes):
             return "I only have %d quote%s for %s" % (n_quotes,
-                        ('s', '')[n_quotes == 1], select)
+                                                      ('s', '')[n_quotes == 1], select)
         elif num < 0:
             selected_quote = quotes[num]
             num = n_quotes + num + 1
         else:
             selected_quote = quotes[num - 1]
     else:
-        num = sr.randint(1, n_quotes)
+        num = random.randint(1, n_quotes)
         selected_quote = quotes[num - 1]
 
     return format_quote(selected_quote, num, n_quotes)
-
-
-@hook.command('qdel', adminonly=True)
-@hook.command
-def quotedelete(inp, nick='', chan='', db=None):
-    ".qdel/.quotedelete [#chan] [nick] <#n>/.quote add <nick> <msg> -- deletes " \
-        "<#n>th quote by <nick> or from <#chan> (adminonly)"
-
-    retrieve = re.match(r"(\S+)(?:\s+#?(-?\d+))?$", inp)
-    retrieve_chan = re.match(r"(#\S+)\s+(\S+)(?:\s+#?(-?\d+))?$", inp)
-
-    if retrieve:
-        select, num = retrieve.groups()
-
-        by_chan = False
-        if select.startswith('#'):
-            by_chan = True
-            quotes = get_quotes_by_chan(db, select)
-        else:
-            quotes = get_quotes_by_nick(db, chan, select)
-    elif retrieve_chan:
-        chan, nick, num = retrieve_chan.groups()
-
-        quotes = get_quotes_by_nick(db, chan, nick)
-    else:
-        return quote.__doc__
-
-    n_quotes = len(quotes)
-
-    if not n_quotes:
-        return "no quotes found"
-
-    num = int(num)
-
-    if num > n_quotes or (num < 0 and num < -n_quotes):
-        return "I only have %d quote%s for %s" % (n_quotes,
-                    ('s', '')[n_quotes == 1], select)
-    elif num < 0:
-        selected_quote = quotes[num]
-        num = n_quotes + num + 1
-    else:
-        selected_quote = quotes[num - 1]
-
-    return format_quote(selected_quote, num, n_quotes)
-

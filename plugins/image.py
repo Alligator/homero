@@ -84,29 +84,29 @@ def imageupload(chan, pw):
   except Exception, e:
     print e
 
-@hook.singlethread
-@hook.command
+# @hook.singlethread
+# @hook.command
 def image(inp, bot=None, chan=None):
   if inp:
     chan = inp
   return imageupload(chan, bot.config['api_keys']['foauth'])
 
-@hook.singlethread
-@hook.event('JOIN')
+# @hook.singlethread
+# @hook.event('JOIN')
 def imagejoin(paraml, input=None, nick=None, chan=None):
   q[chan].append(('join', nick, ' joined ' + chan,))
   if chan == '#sa-minecraft':
     imagedraw(chan)
 
-@hook.singlethread
-@hook.event('PART')
+# @hook.singlethread
+# @hook.event('PART')
 def imagepart(paraml, input=None, nick=None, chan=None):
   q[chan].append(('part', nick, ' left ' + chan,))
   if chan == '#sa-minecraft':
     imagedraw(chan)
 
-@hook.singlethread
-@hook.event('PRIVMSG')
+# @hook.singlethread
+# @hook.event('PRIVMSG')
 def imagething(inp, chan=None, nick=None):
   if inp[1].startswith('.'): return
   if len(inp[1]) + len(nick) + 5 > 79:

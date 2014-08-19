@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from util import hook
 import json
 import requests
@@ -37,7 +38,7 @@ def weather(inp, bot=None, reply=None, nick=None, db=None):
   current = data['currently']
   forecast = data['daily']['summary']
 
-  summary = u'{} | {}C/{}F | Humidity: {} | Wind: {}kph/{}mph'.format(
+  summary = u'{} | {}°C/{}F | Humidity: {} | Wind: {}kph/{}mph'.format(
       current['summary'],     # summary
       int(current['temperature']), # temp in c
       int(current['temperature'] * (9.0/5.0)) + 32, # temp in f lmao

@@ -13,5 +13,11 @@ urls = {
 @hook.command
 def dom4(inp):
   ".dom4 [item|spell|unit|site|weapon|armor] query"
-  kind, term = inp.split(' ', 1)
+  try:
+    kind, term = inp.split(' ', 1)
+  except ValueError,e :
+    return dom4.__doc__
+
+  if kind not in urls:
+    return dom4.__doc__
   return urls[kind].format(quote(term))

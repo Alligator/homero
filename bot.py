@@ -7,6 +7,8 @@ import Queue
 import sys
 import time
 
+import remotedebug
+
 sys.path += ['plugins']  # so 'import hook' works without duplication
 sys.path += ['lib']
 os.chdir(sys.path[0] or '.')  # do stuff relative to the install directory
@@ -17,6 +19,8 @@ class Bot(object):
 
 
 bot = Bot()
+
+remotedebug.listen()
 
 print 'Loading plugins'
 

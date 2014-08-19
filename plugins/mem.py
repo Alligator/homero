@@ -61,7 +61,7 @@ def obj(inp ,bot=None):
 
 prev = 0
 calls = deque(maxlen=10)
-@hook.sieve
+# @hook.sieve
 def sieve_mem(bot, input, func, kind, args):
   global  prev, calls
   calls.append(args['name'])

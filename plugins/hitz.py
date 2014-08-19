@@ -4,7 +4,7 @@ import json
 
 tags = {
   'sport': ['sport', 'nba'],
-  'anime': ['cartoon', 'vector']
+  'anime': ['cartoon']
 }
 
 def get_tags(imgurl):

@@ -59,9 +59,9 @@ def bread(inp, say=None):
   for l in headstone:
     say(l.decode('utf-8'))
 
-@hook.regex('New turn in [^\.].*\. (?:Gone AI|Defeated): (.*)')
+@hook.regex('New turn in [^\.].*\. (?:Gone AI|Defeated): (.*)', ignorebots=False)
 def dom4rip(match, say=None, chan=None, nick=None):
-  if nick != 'Treebot': return
+  if nick.lower() != 'treebot': return
   names = match.group(1).split(',')
   names = [n.strip() for n in names]
   names = ', '.join([n[2:].strip() if n.startswith(('MA', 'EA', 'LA')) else n.strip() for n in names])
