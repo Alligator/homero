@@ -31,7 +31,11 @@ def sponge(inp, say=None):
         "node dot js",
         "wii u",
         "multiple pizza",
-        "bad pun"
+        "bad pun",
+        "estonian",
+        "latvian",
+        "argentinian",
+        "not killing quake live",
         ]
     
     say("<sponge-> i {0} {1}".format(("love" if (randint(0,2) == 0) else "hate"),choice(spongeList)))
