@@ -2,6 +2,7 @@
 from util import hook
 import json
 import requests
+import re
 
 @hook.command(autohelp=False)
 def weather(inp, bot=None, reply=None, nick=None, db=None):
@@ -37,6 +38,12 @@ def weather(inp, bot=None, reply=None, nick=None, db=None):
 
   current = data['currently']
   forecast = data['daily']['summary']
+
+  m = re.search(u'(\d+)°C', forecast)
+  if m:
+    t = str(int(int(m.group(1)) * (9.0/5.0)) + 32)
+    e = m.end(0)
+    forecast = forecast[:e] + '/' + t + 'F' + forecast[e:]
 
   summary = u'{} | {}°C/{}F | Humidity: {} | Wind: {}kph/{}mph'.format(
       current['summary'],     # summary
