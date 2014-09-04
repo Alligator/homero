@@ -3,6 +3,7 @@ from util import hook, http
 from twython import Twython
 from lxml import html
 from time import sleep
+from string import capwords
 import math
 
 token = None
@@ -13,8 +14,7 @@ def init(key, secret):
     token = Twython(key, secret, oauth_version=2).obtain_access_token()
 
 users = {}
-current_chan = ''
-running = False
+active_chans = {}
 
 @hook.command
 def vice(inp, nick=None, bot=None, db=None, say=None, chan=None):
@@ -37,28 +37,28 @@ def vice(inp, nick=None, bot=None, db=None, say=None, chan=None):
   realorfake(nick, real, fake, say, db, chan)
 
 def realorfake(nick, real, fake, say, db, chan):
-  global current_chan, users, running
-  if running: return
-  users = {}
-  current_chan = chan
-  running = True
+  global users, active_chans
+  if chan in active_chans:
+    return
+  users[chan] = {}
+  active_chans[chan] = True
   if random.random() > 0.5:
     msg, url = real()
     real = True
   else:
     msg, url = fake()
     real = False
-  say(msg)
+  say(capwords(msg))
   sleep(20)
-  round_end(nick, real, url, say, db)
-  running = False
+  round_end(nick, real, url, say, db, chan)
+  del active_chans[chan]
 
 @hook.command
 def upworthy(inp, nick=None, bot=None, db=None, say=None, chan=None):
   def real():
     h = http.get_html('http://www.upworthy.com/random')
-    msg = h.xpath('//*[@id="nuggetContent"]/header/h1')[0].text
-    url = h.xpath('/html/head/link[6]')[0].attrib['href']
+    msg = h.xpath('//*/header/h1')[0].text
+    url = h.xpath('/html/head/link[@rel="canonical"]')[0].attrib['href']
     return msg, url
 
   def fake():
@@ -72,15 +72,15 @@ def upworthy(inp, nick=None, bot=None, db=None, say=None, chan=None):
     return msg, url
   realorfake(nick, real, fake, say, db, chan)
 
-def round_end(caller_nick, real, url, say, db):
+def round_end(caller_nick, real, url, say, db, chan):
   global users
   if real: say('that was real ' + url)
   else   : say('that was fake ' + url)
   db.execute("create table if not exists realorfake(nick primary key, tries, wins)")
   correct = []
-  if caller_nick not in users:
-    users[caller_nick] = None
-  for nick, guess in users.iteritems():
+  if caller_nick not in users[chan]:
+    users[chan][caller_nick] = None
+  for nick, guess in users[chan].iteritems():
     stat = db.execute("select tries, wins from realorfake where nick=lower(?)",
                      (nick,)).fetchone()
     if stat:
@@ -129,10 +129,10 @@ def topercent(wins, tries):
 
 @hook.event('PRIVMSG')
 def rof_msg(paraml, nick=None, chan=None):
-  global running, current_chan
-  if not running or chan != current_chan:
+  global active_chans
+  if chan not in active_chans:
     return
   msg = paraml[1]
-  if nick in users: return
-  if   msg.lower() == 'fake': users[nick] = False
-  elif msg.lower() == 'real': users[nick] = True
+  if nick in users[chan]: return
+  if   msg.lower() == 'fake': users[chan][nick] = False
+  elif msg.lower() == 'real': users[chan][nick] = True
