@@ -6,6 +6,9 @@ from itertools import cycle
 import math
 import string
 
+@hook.command
+def echo(inp): return inp
+
 #------------------------------------------------------------------------------
 # COLORS
 
@@ -144,10 +147,11 @@ def ruin(inp):
   ]
   out = u''
   l = len(inp)
+  step = (math.pi/2)/l
   for ind, c in enumerate(inp):
     out += unicode(c)
     if randint(0, l) < ind + 1:
-      for i in range(randint(0, math.sin(math.pi/l))):
+      for i in range(randint(0, int(math.sin(ind * step)*4))):
         out += unichr(randint(*choice(sets)))
   return out
 
