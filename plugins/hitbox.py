@@ -14,6 +14,6 @@ def hitbox(inp, conn=None):
   for stream in streams:
     name = stream['media_display_name']
     if name not in streaming:
-      conn.cmd('privmsg #sa-minecraft \x0313{} started streaming http://stream.alligatr.co.uk/hitbox.html'.format(name))
+      conn.cmd('privmsg #sa-minecraft \x0313{} started streaming http://stream.alligatr.co.uk/'.format(name))
     new_streaming[name] = True
   streaming = new_streaming
