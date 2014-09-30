@@ -16,7 +16,7 @@ def stream(inp, conn=None):
   s = check_stream()
   if s and not streaming:
     streaming = True
-    conn.cmd('privmsg #sa-minecraft \x0313someone started streaming http://stream.alligatr.co.uk/')
+    conn.cmd('privmsg #sa-minecraft \x0313someone started streaming http://stream.alligatr.co.uk/twitch.html')
   elif not s and streaming:
     streaming = False
 
