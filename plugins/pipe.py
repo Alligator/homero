@@ -83,6 +83,8 @@ def match_command(command, bot):
 def pipe(inp, db=None, input=None, bot=None):
   ".pipe <cmd> | <cmd> etc etc. pipe commands into each other. if the first word after the pipe isnt a command the text gets sent to the next command"
   # cmds = inp.split('|')
+  if input.chan == '#dota' or not input.chan.startswith('#'):
+    return
 
   output = Fifo()
   nxt = Fifo()
