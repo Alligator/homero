@@ -1,18 +1,32 @@
 from util import hook
-from treksum import treksum
+from random import choice
+import cPickle as pickle
 
-characters = ['picard', 'riker', 'data', 'worf', 'geordi', 'barclay', 'q', 'pulaski', 'computer', 'guinan', 'troi', 'beverly', 'wesley']
+lines = pickle.load(open('plugins/trek.pickle'))
 
 @hook.command
 def trek(inp):
     ".trek <character> <wordcount>. Characters include: Picard, Riker, Data, Worf, Geordi, Barclay, Q, Pulaski, Computer, Guinan, Troi, Beverly and Wesley. "
-    if inp.lower().split(' ')[0] in characters:
-        count = None
-        for x in inp.split():
-            try:
-                count = int(x)
-            except ValueError:
-                character = x.lower()
-        r = treksum.generate_sentence(word_count=count, character=character)
-        return r
+    try:
+      char, count = inp.split()
+      count = int(count)
+    except ValueError:
+      char = inp
+      count = None
 
+    char = char.upper()
+    if char in lines:
+      if count:
+        if count < 1: count = 1
+        o = count # store initial count
+        d = -1    # search direction, lower first then higher
+        while count not in lines[char]:
+          count += d
+          if count < 1:
+            # if we didnt find anything lower, go higher
+            count = o
+            d = 1
+        return choice(lines[char][count])
+      else:
+        c = choice(lines[char].keys())
+        return choice(lines[char][c])
