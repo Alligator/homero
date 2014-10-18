@@ -101,7 +101,7 @@ def braille(inp, say=None):
   say(lines[0])
   say(lines[1])
 
-@hook.command(adminonly=True)
+# @hook.command(adminonly=True)
 def brailletest(inp, say=None):
   braille('!A"B\'B/C(D)E-F\\[G]H^J`K{L}M|N~O|P|Q', say)
   braille('R|S|T|U|V|W|X|Y|Z|a|b|c|d|e|f|g|h|i|j', say)
