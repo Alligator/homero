@@ -141,7 +141,7 @@ def bopomofo(inp):
   }
   return transliterate(table, inp.lower())
 
-# @hook.command
+@hook.command
 def wadegiles(inp):
   table = {
     'multi': {
@@ -188,7 +188,30 @@ def wadegiles(inp):
       u'apteêfkhilmnojsuüüwy'
     ]
   }
-  return transliterate(table, inp.lower())
+
+  out = ''
+  trans = { ord(a): ord(b) for a, b in zip(*table['single']) }
+
+  for word in inp.split():
+    while len(word) > 0:
+      n = False
+
+      # first try multi
+      for i in range(5, 0, -1):
+        c = word[:i]
+        if c in table['multi']:
+          out += table['multi'][c]
+          word = word[i:]
+          n = True
+          break
+
+      if not n:
+        # next try single
+        out += word[0].translate(trans)
+        word = word[1:]
+    out += ' '
+      
+  return out
 
 def transliterate(key, inp):
   inp = unicode(inp + '\n')
