@@ -6,6 +6,7 @@ import re
 
 @hook.command(autohelp=False)
 def weather(inp, bot=None, reply=None, nick=None, db=None):
+  ".wea [location] [dontsave] -- get weather for location"
   db.execute("create table if not exists weather(nick primary key, loc, lat, lng, desc)")
   dontsave = inp.endswith(' dontsave')
   if dontsave:
