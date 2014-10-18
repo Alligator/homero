@@ -32,8 +32,9 @@ def rejoin(paraml, conn=None):
 
 # join channels when invited
 @hook.event('INVITE')
-def invite(paraml, conn=None):
-    conn.join(paraml[-1])
+def invite(paraml, conn=None, bot=None):
+    if paraml[-1] not in ['#dota']:
+        conn.join(paraml[-1])
 
 
 @hook.event('004')
