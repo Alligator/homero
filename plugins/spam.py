@@ -50,7 +50,7 @@ def weed(inp, say=None):
   say(r' _ -_^_^_^_-  \ \\ // /  -_^_^_^_- _')
   say(r'   - -/_/_/- ^ ^  |  ^ ^ -\_\_\- -')
 
-@hook.command
+@hook.command(autohelp=False, limit=5)
 def skull(inp, say=None):
   say(unicode('╱▔▔▔▔▔▔▔╲╱▔▔▔╲┈', 'utf-8', 'replace'))
   say(unicode('▏╮╭┈╮┊╭┈╮▏▉┈┈▉▏', 'utf-8', 'replace'))
