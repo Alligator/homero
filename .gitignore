@@ -13,3 +13,4 @@ web
 hyle.txt
 *.pyo
 homero.log
+*.log*
