@@ -3,30 +3,30 @@ from collections import OrderedDict
 from datetime import datetime
 import re
 
-taned = False
+taned = { '#lf': False, '#sa-minecraft': False }
 
 @hook.event('*', limit=1)
-def tane_event(paraml, conn=None):
-    global taned
-    today = datetime.today()
-    if today.weekday() == 4 and today.hour == 18 and not taned:
-        taned = True
-        conn.cmd('PRIVMSG #sa-minecraft ' + rainbow("I CAN'T WAIT"))
-        conn.cmd('PRIVMSG #sa-minecraft http://tane.us/weekend.html')
-        conn.cmd('PRIVMSG #sa-minecraft ' + rainbow("FOR THE WEEKEND TO BEGIN"))
+def tane_event(paraml, chan=None, conn=None):
+  global taned
+  today = datetime.today()
+  if today.weekday() == 4 and today.hour == 18 and chan in taned and not taned[chan]:
+    taned[chan] = True
+    conn.cmd('PRIVMSG {} {}'.format(chan, rainbow("I CAN'T WAIT")))
+    conn.cmd('PRIVMSG {} {}'.format(chan, 'http://tane.us/weekend.html'))
+    conn.cmd('PRIVMSG {} {}'.format(chan, rainbow("FOR THE WEEKEND TO BEGIN")))
 
-    if today.weekday() != 4:
-        taned = False
+  if today.weekday() != 4:
+    taned[chan] = False
 
 @hook.command
 def tane(inp, say=None):
-    today = datetime.today()
-    if today.weekday() == 4:
-      say(rainbow("I CAN'T WAIT"))
-      say('http://tane.us/weekend.html')
-      say(rainbow("FOR THE WEEKEND TO BEGIN"))
-    else:
-      return rainbow('с м е р т ь   ж д е т   в с е х   н а с')
+  today = datetime.today()
+  if today.weekday() == 4:
+    say(rainbow("I CAN'T WAIT"))
+    say('http://tane.us/weekend.html')
+    say(rainbow("FOR THE WEEKEND TO BEGIN"))
+  else:
+    return rainbow('с м е р т ь   ж д е т   в с е х   н а с')
 
 colors = OrderedDict([
   ('red',    '\x0304'),
