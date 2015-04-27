@@ -1,19 +1,16 @@
-import locale
 import re
 import time
 
 from util import hook, http
 
 
-locale.setlocale(locale.LC_ALL, '')
-
 youtube_re = (r'(?:youtube.*?(?:v=|/v/)|youtu\.be/|yooouuutuuube.*?id=)'
               '([-_a-z0-9]+)', re.I)
 
 base_url = 'http://gdata.youtube.com/feeds/api/'
 url = base_url + 'videos/%s?v=2&alt=jsonc'
-search_api_url = base_url + 'videos?v=2&alt=jsonc&max-results=1'
-video_url = "http://youtube.com/watch?v=%s"
+search_api_url = 'https://www.googleapis.com/youtube/v3/search'
+video_url = 'http://youtube.com/watch?v=%s'
 
 
 def get_video_description(vid_id):
@@ -39,17 +36,14 @@ def get_video_description(vid_id):
 
     if 'rating' in j:
         out += ' - rated \x02%.2f/5.0\x02 (%d)' % (j['rating'],
-                j['ratingCount'])
+                                                   j['ratingCount'])
 
-    # The use of str.decode() prevents UnicodeDecodeError with some locales
-    # See http://stackoverflow.com/questions/4082645/
     if 'viewCount' in j:
-        out += ' - \x02%s\x02 views' % locale.format('%d',
-                           j['viewCount'], 1).decode(locale.getlocale()[1])
+        out += ' - \x02%s\x02 views' % group_int_digits(j['viewCount'])
 
     upload_time = time.strptime(j['uploaded'], "%Y-%m-%dT%H:%M:%S.000Z")
-    out += ' - \x02%s\x02 on \x02%s\x02' % (j['uploader'],
-                time.strftime("%Y.%m.%d", upload_time))
+    out += ' - \x02%s\x02 on \x02%s\x02' % (
+                        j['uploader'], time.strftime("%Y.%m.%d", upload_time))
 
     if 'contentRating' in j:
         out += ' - \x034NSFW\x02'
@@ -57,24 +51,46 @@ def get_video_description(vid_id):
     return out
 
 
-# @hook.regex(*youtube_re)
+def group_int_digits(number, delimiter=' ', grouping=3):
+    base = str(number).strip()
+    builder = []
+    while base:
+        builder.append(base[-grouping:])
+        base = base[:-grouping]
+    builder.reverse()
+    return delimiter.join(builder)
+
+
+@hook.regex(*youtube_re)
 def youtube_url(match):
     return get_video_description(match.group(1))
 
 
+@hook.command('yt')
 @hook.command('y')
 @hook.command
-def youtube(inp):
+def youtube(inp, bot=None):
     '.youtube <query> -- returns the first YouTube search result for <query>'
 
-    j = http.get_json(search_api_url, q=inp)
+    api_key = bot.config['api_keys']['google']
+    params = {
+        'key': api_key,
+        'fields': 'items(id,snippet(channelId,title))',
+        'part': 'snippet',
+        'type': 'video',
+        'q': inp
+    }
+
+    j = http.get_json(search_api_url, **params)
 
     if 'error' in j:
-        return 'error performing search'
+        return 'error while performing the search'
 
-    if j['data']['totalItems'] == 0:
+    results = j.get("items")
+
+    if not results:
         return 'no results found'
 
-    vid_id = j['data']['items'][0]['id']
+    vid_id = j['items'][0]['id']['videoId']
 
     return get_video_description(vid_id) + " - " + video_url % vid_id
