@@ -52,6 +52,7 @@ def danl(inp, say=None):
     'CuckoldCommunity',
     'BikePorn',
     'electronic_cigarette',
+    'snooker',
   ]
   say('<danl> ' + reddit_get(random.choice(subreddit)))
 
