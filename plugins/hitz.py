@@ -14,7 +14,7 @@ def get_tags(imgurl):
   mash_output = mash_request.json()
   return mash_output['files'][0]['predicted_classes']
 
-@hook.regex(r'(https?://.*(?:imgur)?(?:gif|jpg|png))\s?')
+# @hook.regex(r'(https?://.*(?:imgur)?(?:gif|jpg|png))\s?')
 def hitzimg(inp, lastparam=None, chan=None, nick=None, say=None):
   if chan != '#sa-minecraft' or nick != 'hitz': return
   t = get_tags(inp.group(0))
