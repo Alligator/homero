@@ -27,7 +27,7 @@
 #SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import datetime
-
+import calendar
 
 def timesince(d, now=None):
     """
@@ -66,6 +66,7 @@ def timesince(d, now=None):
 
     # ignore microsecond part of 'd' since we removed it from 'now'
     delta = now - (d - datetime.timedelta(0, 0, d.microsecond))
+    delta -= datetime.timedelta(calendar.leapdays(d.year, now.year))
     since = delta.days * 24 * 60 * 60 + delta.seconds
     if since <= 0:
         # d is in the future compared to now, stop processing.
