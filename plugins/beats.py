@@ -7,4 +7,4 @@ def beats(inp):
   d = datetime.utcnow() + timedelta(hours=1)
   local = d.strftime('%H:%M:%S')
   beats = int(floor((d.second + (d.minute * 60) + (d.hour * 3600)) / 86.4))
-  return 'local time: {} | beat time: {}'.format(local, beats)
+  return 'utc time: {} | beat time: {}'.format(local, beats)
