@@ -9,7 +9,8 @@ urls = {
     'site':  'http://larzm42.github.io/dom4inspector/?page=site&siteq={}&showmoddinginfo=1&showids=1',
     'weapon':'http://larzm42.github.io/dom4inspector/?page=wpn&wpnq={}&showmoddinginfo=1&showids=1',
     'armor': 'http://larzm42.github.io/dom4inspector/?page=armor&armorq={}&showmoddinginfo=1&showids=1',
-    'merc':  'http://larzm42.github.io/dom4inspector/?page=merc&mercq={}&showmoddinginfo=1&showids=1'
+    'merc':  'http://larzm42.github.io/dom4inspector/?page=merc&mercq={}&showmoddinginfo=1&showids=1',
+    'event':  'http://larzm42.github.io/dom4inspector/?page=event&eventq={}&showmoddinginfo=1&showids=1'
 }
 
 @hook.command
