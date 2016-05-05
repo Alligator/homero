@@ -40,7 +40,7 @@ def db_init(db):
                'primary key(vid, chan))')
     db.commit()
 
-@hook.regex(*youtube_re)
+# @hook.regex(*youtube_re)
 def seeninput(match, input=None, db=None, say=None):
     db_init(db)
     vid = match.group(1)
@@ -49,7 +49,7 @@ def seeninput(match, input=None, db=None, say=None):
                 input.nick.lower(), time.time(), input.chan))
     db.commit()
 
-@hook.command
+# @hook.command
 def yt(inp, nick=None, chan=None, db=None):
     '.yt query|hh -- searches youtube links posted in channel. matches usernames and video titles'
     db_init(db)
