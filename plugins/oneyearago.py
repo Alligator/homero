@@ -25,6 +25,11 @@ def threeyearsago(inp, chan=None, say=None):
 def fouryearsago(inp, chan=None, say=None):
   xyearsago(4, chan, say)
 
+@hook.command('5')
+@hook.command
+def fiveyearsago(inp, chan=None, say=None):
+  xyearsago(5, chan, say)
+
 @hook.command('12')
 @hook.command
 def onetwo(inp, chan=None, say=None):
@@ -54,6 +59,20 @@ def onetwothree(inp, chan=None, say=None):
   xyearsago(3, chan, say)
   say('--- four years ago ---')
   xyearsago(4, chan, say)
+
+@hook.command('12345')
+@hook.command
+def onetwothree(inp, chan=None, say=None):
+  say('--- one year ago ---')
+  xyearsago(1, chan, say)
+  say('--- two years ago ---')
+  xyearsago(2, chan, say)
+  say('--- three years ago ---')
+  xyearsago(3, chan, say)
+  say('--- four years ago ---')
+  xyearsago(4, chan, say)
+  say('--- five years ago ---')
+  xyearsago(5, chan, say)
 
 def xyearsago(x, chan, say):
   global cache, cached_filename
