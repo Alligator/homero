@@ -4,7 +4,6 @@ streaming = {}
 
 @hook.event('*', limit=2)
 def hitbox(inp, conn=None):
-  pass
   global streaming
   j = http.get_json('https://api.hitbox.tv/team/breadcrew?media=true&media_type=live&liveonly=true')
   streams = j['media']['livestream']
