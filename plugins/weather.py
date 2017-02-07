@@ -38,13 +38,15 @@ def weather(inp, bot=None, reply=None, nick=None, db=None):
   data = json.loads(requests.get(url, params={'units': 'si'}).text)
 
   current = data['currently']
+  daily = data['daily']
   forecast = data['daily']['summary']
 
   m = re.search(u'([-\d]+)°C', forecast)
   if m:
     t = str(int(int(m.group(1)) * (9.0/5.0)) + 32)
     e = m.end(0)
-    forecast = forecast[:e] + '/' + t + 'F' + forecast[e:]
+    # forecast = forecast[:e] + '/' + t + 'F' + forecast[e:]
+    forecast = ' | '.join([get_icon(data['icon']) for data in daily['data']])
 
   summary = u'{} | {}°C/{}F | Humidity: {} | Wind: {}kph/{}mph'.format(
       current['summary'],     # summary
@@ -62,3 +64,18 @@ def weather(inp, bot=None, reply=None, nick=None, db=None):
                (nick.lower(), addr, geo['lat'], geo['lng'], geo['desc']))
     db.commit()
   return
+
+def get_icon(key):
+  icons = {
+    'clear-day': u'☀️',
+    'clear-night': u'☀️',
+    'rain': u'☔️',
+    'snow': u'❄️',
+    'sleet': u'☔️', 
+    'wind': u'🌬',
+    'fog': u'🌁',
+    'cloudy': u'☁️',
+    'partly-cloudy-day': u'⛅',
+    'partly-cloudy-night': u'⛅'
+  }
+  return icons[key]
