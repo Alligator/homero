@@ -7,7 +7,7 @@ import base64
 import json
 from random import shuffle, choice
 from datetime import datetime
-
+import uuid 
 import requests
 from PIL import Image, ImageDraw, ImageFont
 
@@ -50,16 +50,9 @@ def modifycomic(inp, filename, bot):
     img = new
 
   def post(img):
-    auth = ('enemy.forest.brigade@gmail.com', bot.config['api_keys']['foauth'])
-    o = cStringIO.StringIO()
-    img.save(o, 'png')
-    data = {'image': base64.b64encode(o.getvalue())}
-    resp = requests.post('https://foauth.org/api.imgur.com/3/upload', data=data, auth=auth)
-    try:
-      j = json.loads(resp.text)
-      return j['data']['link']
-    except Exception, e:
-      print e
+    fname = str(uuid.uuid4()) + '.jpg'
+    img.save(os.path.join(savepath, fname), quality=86)
+    return "http://irc.alligatr.co.uk/homero/" + fname
 
   if split:
     height = img.size[1]
