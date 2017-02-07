@@ -12,3 +12,7 @@ def anime(inp, channel=None):
 @hook.regex(r'(?<!tr)illwinter', re.IGNORECASE)
 def trillwinter(inp, say=None):
   return say('TRILLWINTER')
+
+@hook.regex(r'hot pants', re.IGNORECASE)
+def hotpants(inp, say=None):
+  say('Jesus Christ.')
