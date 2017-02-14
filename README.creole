@@ -1,3 +1,5 @@
 = Hey! =
 
 I'm silly and didn't fork this, it's a modified version of [[https://github.com/rmmh/skybot/|Skybot]], so go check that out if you're after a Python based IRC bot.
+
+There might be some objectionable content in this repo, that's where 6 years of in-jokes collected in an IRC bot gets you. I don't vet everything that goes in here so if there is something truly terrible contact me and we can fix it.
